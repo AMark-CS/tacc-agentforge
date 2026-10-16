@@ -1,0 +1,13 @@
+SDK_BOOTSTRAP=/mnt/home/public/course-envs/CSIT6000V/assignment1/mpi-gemm-v1
+Question: 37加58等于多少？只输出数字。
+Answer: 95
+Usage: {'prompt_tokens': 24, 'total_tokens': 27, 'completion_tokens': 3, 'prompt_tokens_details': None}
+Elapsed seconds: 14.88
+PASS
+Question: 中国的首都是哪里？只输出城市名称。
+Answer: 北京
+Usage: {'prompt_tokens': 22, 'total_tokens': 24, 'completion_tokens': 2, 'prompt_tokens_details': None}
+Elapsed seconds: 0.304
+PASS
+Result saved: /mnt/home/markzhang/USERDIR/tacc-agentforge-results/client-27412.json
+ALL MODEL SMOKE TESTS PASSED

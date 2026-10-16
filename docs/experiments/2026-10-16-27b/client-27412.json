@@ -1,0 +1,99 @@
+{
+  "job_id": "27412",
+  "base_url": "http://10-0-1-11:8000/v1",
+  "tests": [
+    {
+      "prompt": "37加58等于多少？只输出数字。",
+      "expected": "95",
+      "answer": "95",
+      "passed": true,
+      "elapsed_seconds": 14.88023819681257,
+      "response": {
+        "id": "chatcmpl-9c71ce6bc375b165",
+        "object": "chat.completion",
+        "created": 1792140614,
+        "model": "qwen3.8-27b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "95",
+              "refusal": null,
+              "annotations": null,
+              "audio": null,
+              "function_call": null,
+              "reasoning": null
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null,
+            "token_ids": null,
+            "routed_experts": null
+          }
+        ],
+        "service_tier": null,
+        "system_fingerprint": "vllm-0.26.0-tp2-98836ff6",
+        "usage": {
+          "prompt_tokens": 24,
+          "total_tokens": 27,
+          "completion_tokens": 3,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null,
+        "prompt_token_ids": null,
+        "prompt_text": null,
+        "kv_transfer_params": null,
+        "ec_transfer_params": null,
+        "metrics": null
+      }
+    },
+    {
+      "prompt": "中国的首都是哪里？只输出城市名称。",
+      "expected": "北京",
+      "answer": "北京",
+      "passed": true,
+      "elapsed_seconds": 0.3036639792844653,
+      "response": {
+        "id": "chatcmpl-93164d85bd154f38",
+        "object": "chat.completion",
+        "created": 1792140628,
+        "model": "qwen3.8-27b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "北京",
+              "refusal": null,
+              "annotations": null,
+              "audio": null,
+              "function_call": null,
+              "reasoning": null
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null,
+            "token_ids": null,
+            "routed_experts": null
+          }
+        ],
+        "service_tier": null,
+        "system_fingerprint": "vllm-0.26.0-tp2-98836ff6",
+        "usage": {
+          "prompt_tokens": 22,
+          "total_tokens": 24,
+          "completion_tokens": 2,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null,
+        "prompt_token_ids": null,
+        "prompt_text": null,
+        "kv_transfer_params": null,
+        "ec_transfer_params": null,
+        "metrics": null
+      }
+    }
+  ],
+  "all_passed": true
+}

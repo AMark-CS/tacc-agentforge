@@ -27,7 +27,23 @@ LLM Inference Service
 TACC Compute Resources
 ```
 
-The exact model, inference framework, and agent framework will be selected during implementation and documented here.
+The first deployed model is the course-provided `Qwen3.8-27B-AWQ-INT4`
+checkpoint, served through vLLM with the API alias `qwen3.8-27b`.
+Agent implementation is still pending.
+
+## Verified TACC Deployment
+
+On October 16, 2026, a two-GPU quantized service and a separate CPU client
+successfully completed arithmetic and Chinese question-answering smoke tests.
+The working configuration uses eager execution, 4K context, and tensor parallelism
+of two. The original compiled 32K configuration did not become ready in the
+first trial and is not claimed as verified. The service was stopped after testing.
+
+- [Deployment and reproduction](deploy/tacc/README.md)
+- [Experiment results and complete logs](docs/experiments/2026-10-16-27b/README.md)
+
+This milestone deploys existing quantized weights; it does not yet implement
+new quantization, an agent, or a performance benchmark.
 
 ## Prerequisites
 
@@ -67,9 +83,9 @@ Directories will be added as the implementation develops.
 ## Roadmap
 
 - [x] Initialize the project repository
-- [ ] Select the base model and inference framework
-- [ ] Run a minimal inference job on TACC
-- [ ] Expose the model through a reusable inference interface
+- [x] Select an initial checkpoint and inference framework
+- [x] Run a minimal inference job on TACC
+- [x] Expose the model through a reusable inference interface
 - [ ] Implement the initial agent loop
 - [ ] Add tools and memory
 - [ ] Design evaluation tasks and baselines
@@ -78,7 +94,8 @@ Directories will be added as the implementation develops.
 
 ## Status
 
-This project is currently in the design and environment-setup stage.
+Initial quantized model serving and API smoke tests are complete. The next
+milestone is tool-using agent implementation and systematic evaluation.
 
 ## Course
 
