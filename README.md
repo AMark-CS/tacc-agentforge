@@ -6,30 +6,21 @@ TACC AgentForge is a course project for **Advanced AI Computing and Systems**. T
 
 - Deploy and serve a large language model on TACC.
 - Build an agent that can reason, use tools, and complete multi-step tasks.
+- Explore post-training to improve instruction following and tool use.
+- Study model quantization and inference acceleration under limited GPU resources.
 - Evaluate the system in terms of correctness, latency, throughput, and resource utilization.
 - Study practical systems issues such as model loading, GPU scheduling, communication overhead, and inference optimization.
 
 ## Planned Architecture
 
-```text
-User
-  |
-  v
-Agent Runtime
-  |- Planning and reasoning
-  |- Tool selection and execution
-  |- Memory and context management
-  |
-  v
-LLM Inference Service
-  |
-  v
-TACC Compute Resources
-```
+![TACC AgentForge planned architecture: agent application, post-training, quantization and inference, evaluation, and TACC infrastructure](docs/images/planned-architecture.svg)
+
+Training, quantization, and serving variants will be compared on fixed held-out tasks.
 
 The first deployed model is the course-provided `Qwen3.8-27B-AWQ-INT4`
 checkpoint, served through vLLM with the API alias `qwen3.8-27b`.
-Agent implementation is still pending.
+Agent implementation, post-training, and new quantization are planned;
+model and method selection depend on available TACC resources and compatibility.
 
 ## Verified TACC Deployment
 
@@ -69,6 +60,8 @@ Do not commit private keys, passwords, access tokens, model credentials, or gene
 ```text
 tacc-agentforge/
 |- agent/          # Agent planning, tools, and memory
+|- training/       # Post-training and adapter export
+|- quantization/   # Model calibration and quantization
 |- inference/      # Model loading and inference service
 |- configs/        # Model, agent, and experiment configurations
 |- scripts/        # TACC deployment and job scripts
@@ -89,6 +82,11 @@ Directories will be added as the implementation develops.
 - [ ] Implement the initial agent loop
 - [ ] Add tools and memory
 - [ ] Design evaluation tasks and baselines
+- [ ] Verify training resources and select a post-training model
+- [ ] Prepare training data and run an SFT baseline
+- [ ] Explore preference optimization if resources permit
+- [ ] Quantize the selected model and evaluate quality-memory tradeoffs
+- [ ] Benchmark inference acceleration with controlled comparisons
 - [ ] Measure latency, throughput, and GPU utilization
 - [ ] Document results and system limitations
 
@@ -96,6 +94,8 @@ Directories will be added as the implementation develops.
 
 Initial quantized model serving and API smoke tests are complete. The next
 milestone is tool-using agent implementation and systematic evaluation.
+Post-training, new quantization, and inference acceleration experiments remain
+in the planning stage.
 
 ## Course
 
