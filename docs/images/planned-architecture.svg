@@ -1,135 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1280" viewBox="0 0 1600 1280" role="img" aria-labelledby="title description">
-<title id="title">TACC AgentForge — Planned Architecture</title>
-<desc id="description">Planned architecture with five capability layers: agent application, post-training, quantization and inference, evaluation, and TACC infrastructure.</desc>
-<rect width="1600" height="1280" fill="#FFFFFF"/>
-<g font-family="Segoe UI, Arial, sans-serif" fill="#243244">
-<text x="800" y="56" text-anchor="middle" font-size="32" font-weight="700">TACC AgentForge</text>
-<text x="800" y="88" text-anchor="middle" font-size="17" fill="#657791">Planned architecture · Agent capabilities, model optimization, and TACC systems</text>
-<g id="layer01">
-<rect x="48" y="152" width="1504" height="190" rx="16" fill="#EFF4FF" stroke="#C9D9FF" stroke-width="1.5"/>
-<rect x="76" y="172" width="330" height="36" rx="8" fill="#3167F6"/>
-<text x="96" y="196" font-size="18" font-weight="700" fill="#FFFFFF">01  Agent Application Layer</text>
-<g id="module11">
-<rect x="76" y="232" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="249.5" y="271" text-anchor="middle" font-size="19" font-weight="600">Planning and Reasoning</text>
-<text x="249.5" y="296" text-anchor="middle" font-size="14" fill="#657791">Multi-step decisions and agent loop</text>
-</g>
-<g id="module12">
-<rect x="443" y="232" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="616.5" y="271" text-anchor="middle" font-size="19" font-weight="600">Tool Execution</text>
-<text x="616.5" y="296" text-anchor="middle" font-size="14" fill="#657791">Tool schemas, validation, and results</text>
-</g>
-<g id="module13">
-<rect x="810" y="232" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="983.5" y="271" text-anchor="middle" font-size="19" font-weight="600">Context and Memory</text>
-<text x="983.5" y="296" text-anchor="middle" font-size="14" fill="#657791">Conversation history and task state</text>
-</g>
-<g id="module14">
-<rect x="1177" y="232" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="1350.5" y="271" text-anchor="middle" font-size="19" font-weight="600">Model API Client</text>
-<text x="1350.5" y="296" text-anchor="middle" font-size="14" fill="#657791">OpenAI-compatible chat requests</text>
-</g>
-</g>
-<g id="layer02">
-<rect x="48" y="364" width="1504" height="190" rx="16" fill="#EFFAF4" stroke="#BCE8CF" stroke-width="1.5"/>
-<rect x="76" y="384" width="330" height="36" rx="8" fill="#149D57"/>
-<text x="96" y="408" font-size="18" font-weight="700" fill="#FFFFFF">02  Post-Training Layer</text>
-<g id="module21">
-<rect x="76" y="444" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="249.5" y="483" text-anchor="middle" font-size="19" font-weight="600">Training Data</text>
-<text x="249.5" y="508" text-anchor="middle" font-size="14" fill="#657791">Demonstrations and tool-use trajectories</text>
-</g>
-<g id="module22">
-<rect x="443" y="444" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="616.5" y="483" text-anchor="middle" font-size="19" font-weight="600">Supervised Fine-Tuning</text>
-<text x="616.5" y="508" text-anchor="middle" font-size="14" fill="#657791">SFT with LoRA / QLoRA</text>
-</g>
-<g id="module23">
-<rect x="810" y="444" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="983.5" y="483" text-anchor="middle" font-size="19" font-weight="600">Preference Optimization</text>
-<text x="983.5" y="508" text-anchor="middle" font-size="14" fill="#657791">Optional DPO after the SFT baseline</text>
-</g>
-<g id="module24">
-<rect x="1177" y="444" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="1350.5" y="483" text-anchor="middle" font-size="19" font-weight="600">Model Export</text>
-<text x="1350.5" y="508" text-anchor="middle" font-size="14" fill="#657791">Adapters and deployment checkpoints</text>
-</g>
-</g>
-<g id="layer03">
-<rect x="48" y="576" width="1504" height="190" rx="16" fill="#FFF8ED" stroke="#F2D6A3" stroke-width="1.5"/>
-<rect x="76" y="596" width="330" height="36" rx="8" fill="#CB8300"/>
-<text x="96" y="620" font-size="18" font-weight="700" fill="#FFFFFF">03  Quantization and Inference</text>
-<g id="module31">
-<rect x="76" y="656" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="249.5" y="695" text-anchor="middle" font-size="19" font-weight="600">Calibration</text>
-<text x="249.5" y="720" text-anchor="middle" font-size="14" fill="#657791">Representative task and tool prompts</text>
-</g>
-<g id="module32">
-<rect x="443" y="656" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="616.5" y="695" text-anchor="middle" font-size="19" font-weight="600">Weight Quantization</text>
-<text x="616.5" y="720" text-anchor="middle" font-size="14" fill="#657791">INT8 / INT4 quality-memory tradeoffs</text>
-</g>
-<g id="module33">
-<rect x="810" y="656" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="983.5" y="695" text-anchor="middle" font-size="19" font-weight="600">vLLM Serving</text>
-<text x="983.5" y="720" text-anchor="middle" font-size="14" fill="#657791">Course INT4 model: TP=2, 4K context</text>
-</g>
-<g id="module34">
-<rect x="1177" y="656" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="1350.5" y="695" text-anchor="middle" font-size="19" font-weight="600">Inference Acceleration</text>
-<text x="1350.5" y="720" text-anchor="middle" font-size="14" fill="#657791">Batching, caching, and execution modes</text>
-</g>
-</g>
-<g id="layer04">
-<rect x="48" y="788" width="1504" height="190" rx="16" fill="#F5F0FF" stroke="#DDCCFC" stroke-width="1.5"/>
-<rect x="76" y="808" width="330" height="36" rx="8" fill="#7C3AED"/>
-<text x="96" y="832" font-size="18" font-weight="700" fill="#FFFFFF">04  Evaluation Layer</text>
-<g id="module41">
-<rect x="76" y="868" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="249.5" y="907" text-anchor="middle" font-size="19" font-weight="600">Task Benchmarks</text>
-<text x="249.5" y="932" text-anchor="middle" font-size="14" fill="#657791">Held-out tasks and agent success rate</text>
-</g>
-<g id="module42">
-<rect x="443" y="868" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="616.5" y="907" text-anchor="middle" font-size="19" font-weight="600">Controlled Comparisons</text>
-<text x="616.5" y="932" text-anchor="middle" font-size="14" fill="#657791">Same-model training / precision variants</text>
-</g>
-<g id="module43">
-<rect x="810" y="868" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="983.5" y="907" text-anchor="middle" font-size="19" font-weight="600">Serving Metrics</text>
-<text x="983.5" y="932" text-anchor="middle" font-size="14" fill="#657791">TTFT, throughput, latency, and VRAM</text>
-</g>
-<g id="module44">
-<rect x="1177" y="868" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="1350.5" y="907" text-anchor="middle" font-size="19" font-weight="600">Experiment Records</text>
-<text x="1350.5" y="932" text-anchor="middle" font-size="14" fill="#657791">Versions, configs, seeds, and results</text>
-</g>
-</g>
-<g id="layer05">
-<rect x="48" y="1000" width="1504" height="190" rx="16" fill="#EEF9FC" stroke="#BCE4ED" stroke-width="1.5"/>
-<rect x="76" y="1020" width="330" height="36" rx="8" fill="#147D94"/>
-<text x="96" y="1044" font-size="18" font-weight="700" fill="#FFFFFF">05  TACC Infrastructure Layer</text>
-<g id="module51">
-<rect x="76" y="1080" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="249.5" y="1119" text-anchor="middle" font-size="19" font-weight="600">Job Submission</text>
-<text x="249.5" y="1144" text-anchor="middle" font-size="14" fill="#657791">tcloud SDK and Slurm allocations</text>
-</g>
-<g id="module52">
-<rect x="443" y="1080" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="616.5" y="1119" text-anchor="middle" font-size="19" font-weight="600">GPU Resources</text>
-<text x="616.5" y="1144" text-anchor="middle" font-size="14" fill="#657791">2 GPUs with observed ~24 GiB each</text>
-</g>
-<g id="module53">
-<rect x="810" y="1080" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="983.5" y="1119" text-anchor="middle" font-size="19" font-weight="600">Runtime Environment</text>
-<text x="983.5" y="1144" text-anchor="middle" font-size="14" fill="#657791">Shared course Python and vLLM runtime</text>
-</g>
-<g id="module54">
-<rect x="1177" y="1080" width="347" height="84" rx="10" fill="#FFFFFF" stroke="#CFDAE7" stroke-width="1.5"/>
-<text x="1350.5" y="1119" text-anchor="middle" font-size="19" font-weight="600">Model and Result Storage</text>
-<text x="1350.5" y="1144" text-anchor="middle" font-size="14" fill="#657791">Personal USERDIR artifacts and reports</text>
-</g>
-</g>
-<text x="800" y="1234" text-anchor="middle" font-size="14" fill="#657791">Layered capability view · Training and quantization methods depend on available weights, hardware, and runtime support</text>
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="511.2756" height="298" preserveAspectRatio="xMinYMin meet" viewBox="0 0 511 298" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="511.2756" height="298"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-298)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="252" width="511.2756" height="46" rx="4" ry="4" style="stroke: rgb(93%,95%,100%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,95%,100%); fill-rule: evenodd;"/>
+			<text x="7" y="280" style="font-family: Arial-Bold; font-size: 8.6px;fill: rgb(15%,33%,64%); stroke:none;" transform="translate(0,560) scale(1,-1)">01 Application</text>
+			<text x="7" y="268" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,536) scale(1,-1)">User and agent</text>
+			<rect x="102.0" y="256" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="108.0" y="282" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,564) scale(1,-1)">Browser frontend</text>
+			<text x="108.0" y="271" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,542) scale(1,-1)">Needs, budgets, revisions</text>
+			<rect x="238.09186666666668" y="256" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.09186666666668" y="282" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,564) scale(1,-1)">Python backend</text>
+			<text x="244.09186666666668" y="271" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,542) scale(1,-1)">Sessions and API bridge</text>
+			<rect x="374.18373333333335" y="256" width="131.0918666666667" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380.18373333333335" y="282" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,564) scale(1,-1)">Bounded agent</text>
+			<text x="380.18373333333335" y="271" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,542) scale(1,-1)">Retrieve, compare, validate</text>
+			<rect x="0" y="202" width="511.2756" height="46" rx="4" ry="4" style="stroke: rgb(92%,97%,95%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,97%,95%); fill-rule: evenodd;"/>
+			<text x="7" y="230" style="font-family: Arial-Bold; font-size: 8.6px;fill: rgb(12%,47%,35%); stroke:none;" transform="translate(0,460) scale(1,-1)">02 Knowledge</text>
+			<text x="7" y="218" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,436) scale(1,-1)">Acquisition and retrieval</text>
+			<rect x="102.0" y="206" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="108.0" y="232" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,464) scale(1,-1)">SerpApi connector</text>
+			<text x="108.0" y="221" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,442) scale(1,-1)">Shopping + Product APIs</text>
+			<rect x="238.09186666666668" y="206" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.09186666666668" y="232" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,464) scale(1,-1)">Evidence store</text>
+			<text x="244.09186666666668" y="221" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,442) scale(1,-1)">SQLite tables + raw JSON</text>
+			<rect x="374.18373333333335" y="206" width="131.0918666666667" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380.18373333333335" y="232" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,464) scale(1,-1)">Evidence retrieval</text>
+			<text x="380.18373333333335" y="221" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,442) scale(1,-1)">Filters, FTS5, source IDs</text>
+			<rect x="0" y="152" width="511.2756" height="46" rx="4" ry="4" style="stroke: rgb(94%,94%,98%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,94%,98%); fill-rule: evenodd;"/>
+			<text x="7" y="180" style="font-family: Arial-Bold; font-size: 8.6px;fill: rgb(33%,33%,63%); stroke:none;" transform="translate(0,360) scale(1,-1)">03 Post-training</text>
+			<text x="7" y="168" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,336) scale(1,-1)">Behavior adaptation</text>
+			<rect x="102.0" y="156" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="108.0" y="182" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,364) scale(1,-1)">Demonstrations</text>
+			<text x="108.0" y="171" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,342) scale(1,-1)">Development traces only</text>
+			<rect x="238.09186666666668" y="156" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.09186666666668" y="182" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,364) scale(1,-1)">SFT and optional DPO</text>
+			<text x="244.09186666666668" y="171" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,342) scale(1,-1)">LoRA / QLoRA adapters</text>
+			<rect x="374.18373333333335" y="156" width="131.0918666666667" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380.18373333333335" y="182" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,364) scale(1,-1)">Model export</text>
+			<text x="380.18373333333335" y="171" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,342) scale(1,-1)">Checkpoint and tokenizer</text>
+			<rect x="0" y="102" width="511.2756" height="46" rx="4" ry="4" style="stroke: rgb(100%,96%,91%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,96%,91%); fill-rule: evenodd;"/>
+			<text x="7" y="130" style="font-family: Arial-Bold; font-size: 8.6px;fill: rgb(59%,39%,8%); stroke:none;" transform="translate(0,260) scale(1,-1)">04 Inference</text>
+			<text x="7" y="118" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,236) scale(1,-1)">Quantization and serving</text>
+			<rect x="102.0" y="106" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="108.0" y="132" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,264) scale(1,-1)">Calibrate and quantize</text>
+			<text x="108.0" y="121" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,242) scale(1,-1)">Same checkpoint, INT8 / INT4</text>
+			<rect x="238.09186666666668" y="106" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.09186666666668" y="132" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,264) scale(1,-1)">vLLM service</text>
+			<text x="244.09186666666668" y="121" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,242) scale(1,-1)">TP=2, 4K, max 2 sequences</text>
+			<rect x="374.18373333333335" y="106" width="131.0918666666667" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380.18373333333335" y="132" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,264) scale(1,-1)">Serving acceleration</text>
+			<text x="380.18373333333335" y="121" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,242) scale(1,-1)">Batching, cache, execution</text>
+			<rect x="0" y="52" width="511.2756" height="46" rx="4" ry="4" style="stroke: rgb(96%,94%,98%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,94%,98%); fill-rule: evenodd;"/>
+			<text x="7" y="80" style="font-family: Arial-Bold; font-size: 8.6px;fill: rgb(45%,32%,61%); stroke:none;" transform="translate(0,160) scale(1,-1)">05 Evaluation</text>
+			<text x="7" y="68" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,136) scale(1,-1)">Frozen replay</text>
+			<rect x="102.0" y="56" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="108.0" y="82" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,164) scale(1,-1)">Recommendation quality</text>
+			<text x="108.0" y="71" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,142) scale(1,-1)">Success, constraints, claims</text>
+			<rect x="238.09186666666668" y="56" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.09186666666668" y="82" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,164) scale(1,-1)">Evidence and retrieval</text>
+			<text x="244.09186666666668" y="71" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,142) scale(1,-1)">Recall@5, MRR@5, faithfulness</text>
+			<rect x="374.18373333333335" y="56" width="131.0918666666667" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380.18373333333335" y="82" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,164) scale(1,-1)">System efficiency</text>
+			<text x="380.18373333333335" y="71" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,142) scale(1,-1)">User latency, TTFT, VRAM</text>
+			<rect x="0" y="2" width="511.2756" height="46" rx="4" ry="4" style="stroke: rgb(93%,96%,98%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,98%); fill-rule: evenodd;"/>
+			<text x="7" y="30" style="font-family: Arial-Bold; font-size: 8.6px;fill: rgb(15%,45%,55%); stroke:none;" transform="translate(0,60) scale(1,-1)">06 TACC</text>
+			<text x="7" y="18" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,36) scale(1,-1)">Execution and storage</text>
+			<rect x="102.0" y="6" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="108.0" y="32" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,64) scale(1,-1)">SDK and Slurm jobs</text>
+			<text x="108.0" y="21" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,42) scale(1,-1)">GPU service + CPU worker</text>
+			<rect x="238.09186666666668" y="6" width="131.09186666666668" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.09186666666668" y="32" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,64) scale(1,-1)">Runtime and storage</text>
+			<text x="244.09186666666668" y="21" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,42) scale(1,-1)">Course environment, USERDIR</text>
+			<rect x="374.18373333333335" y="6" width="131.0918666666667" height="38" rx="3" ry="3" style="stroke: rgb(79%,83%,88%); stroke-linecap: butt; stroke-width: 0.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380.18373333333335" y="32" style="font-family: Arial-Bold; font-size: 8.5px;fill: rgb(12%,18%,27%); stroke:none;" transform="translate(0,64) scale(1,-1)">File bridge</text>
+			<text x="380.18373333333335" y="21" style="font-family: Arial; font-size: 8px;fill: rgb(32%,39%,47%); stroke:none;" transform="translate(0,42) scale(1,-1)">Request IDs and deadlines</text>
+		</g>
+	</g>
 </svg>

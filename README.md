@@ -1,11 +1,12 @@
 # TACC AgentForge
 
-TACC AgentForge is a course project for **Advanced AI Computing and Systems**. The project explores how to deploy a large language model on the TACC platform and build an agent system on top of the deployed model.
+TACC AgentForge is a course project for **Advanced AI Computing and Systems**. The project explores how to deploy a large language model on the TACC platform and build a shopping and budget advisor on top of the deployed model.
 
 ## Project Goals
 
 - Deploy and serve a large language model on TACC.
 - Build an agent that can reason, use tools, and complete multi-step tasks.
+- Acquire shopping evidence through SerpApi and build a source-linked knowledge base.
 - Explore post-training to improve instruction following and tool use.
 - Study model quantization and inference acceleration under limited GPU resources.
 - Evaluate the system in terms of correctness, latency, throughput, and resource utilization.
@@ -13,9 +14,18 @@ TACC AgentForge is a course project for **Advanced AI Computing and Systems**. T
 
 ## Planned Architecture
 
-![TACC AgentForge planned architecture: agent application, post-training, quantization and inference, evaluation, and TACC infrastructure](docs/images/planned-architecture.svg)
+![Shopping advisor planned architecture: application, SerpApi acquisition and knowledge retrieval, post-training, inference, evaluation, and TACC infrastructure](docs/images/planned-architecture.svg)
+
+SerpApi data will be normalized into a persistent SQLite knowledge base with
+source links, timestamps, and versioned snapshots. The agent will retrieve
+evidence and validate budgets before returning recommendations.
 
 Training, quantization, and serving variants will be compared on fixed held-out tasks.
+
+- [Development plan and design decisions](tasks/plan.md)
+- [Implementation tasks and acceptance checks](tasks/todo.md)
+- [Baseline design and pipeline metrics](docs/evaluation-metrics.md)
+- [Two-page project proposal](output/pdf/shopping-budget-advisor-proposal.pdf)
 
 The first deployed model is the course-provided `Qwen3.8-27B-AWQ-INT4`
 checkpoint, served through vLLM with the API alias `qwen3.8-27b`.
@@ -60,6 +70,8 @@ Do not commit private keys, passwords, access tokens, model credentials, or gene
 ```text
 tacc-agentforge/
 |- agent/          # Agent planning, tools, and memory
+|- app/            # Browser interface, backend, and TACC request bridge
+|- knowledge/      # SerpApi acquisition, SQLite evidence, and retrieval
 |- training/       # Post-training and adapter export
 |- quantization/   # Model calibration and quantization
 |- inference/      # Model loading and inference service
@@ -79,8 +91,12 @@ Directories will be added as the implementation develops.
 - [x] Select an initial checkpoint and inference framework
 - [x] Run a minimal inference job on TACC
 - [x] Expose the model through a reusable inference interface
+- [ ] Verify SDK file transfer and the TACC worker runtime
+- [ ] Collect and normalize SerpApi shopping evidence
+- [ ] Build versioned knowledge snapshots and evidence retrieval
 - [ ] Implement the initial agent loop
-- [ ] Add tools and memory
+- [ ] Add budget validation, tools, and session memory
+- [ ] Connect the browser and backend to the TACC worker
 - [ ] Design evaluation tasks and baselines
 - [ ] Verify training resources and select a post-training model
 - [ ] Prepare training data and run an SFT baseline
