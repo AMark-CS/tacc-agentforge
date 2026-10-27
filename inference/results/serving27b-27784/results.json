@@ -1,0 +1,388 @@
+{
+  "group": "serving27b",
+  "settings": {
+    "served_name": "qwen3.8-27b",
+    "workload": {
+      "input_len": 512,
+      "output_len": 128,
+      "num_prompts": 32,
+      "concurrency": [
+        1,
+        4,
+        8
+      ],
+      "prompt_kinds": [
+        "distinct",
+        "shared_prefix"
+      ],
+      "repeats": 2
+    },
+    "model_path": "$QWEN_MODEL_PATH",
+    "tensor_parallel_size": 2,
+    "startup_timeout_s": 600
+  },
+  "results": [
+    {
+      "variant": "no-chunked-prefill",
+      "args": [
+        "--safetensors-load-strategy",
+        "prefetch",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--gpu-memory-utilization",
+        "0.85",
+        "--max-model-len",
+        "4096",
+        "--max-num-seqs",
+        "8",
+        "--max-num-batched-tokens",
+        "2048",
+        "--reasoning-parser",
+        "qwen3",
+        "--enforce-eager",
+        "--disable-custom-all-reduce",
+        "--no-enable-chunked-prefill"
+      ],
+      "env": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_IB_DISABLE": "1"
+      },
+      "status": "failed",
+      "error": "server not ready (crash or timeout); see server log",
+      "peak_gpu_mem_gb": 0.0,
+      "gpu_mem_error": "nvidia-smi not found",
+      "server_log_facts": {}
+    },
+    {
+      "variant": "kv-fp8",
+      "args": [
+        "--safetensors-load-strategy",
+        "prefetch",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--gpu-memory-utilization",
+        "0.85",
+        "--max-model-len",
+        "4096",
+        "--max-num-seqs",
+        "8",
+        "--max-num-batched-tokens",
+        "2048",
+        "--reasoning-parser",
+        "qwen3",
+        "--enforce-eager",
+        "--disable-custom-all-reduce",
+        "--kv-cache-dtype",
+        "fp8"
+      ],
+      "env": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_IB_DISABLE": "1"
+      },
+      "status": "failed",
+      "error": "every request failed: <HTTPError 500: 'Internal Server Error'>",
+      "startup_s": 200.0472789760679,
+      "streaming": {
+        "distinct-c1": {
+          "config": "kv-fp8",
+          "requests": 16,
+          "failed": 16,
+          "success_rate": 0.0,
+          "wall_s": 0.10918538086116314,
+          "output_tokens": 0,
+          "output_tokens_per_s": 0.0,
+          "requests_per_s": 0.0,
+          "ttft_ms": {
+            "mean": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tpot_ms": {
+            "mean": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "itl_ms": {
+            "mean": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "e2e_ms": {
+            "mean": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "gpu_mem_gb": 0.0
+        }
+      },
+      "peak_gpu_mem_gb": 0.0,
+      "gpu_mem_error": "nvidia-smi not found",
+      "server_log_facts": {
+        "weights_gib": 9.27,
+        "kv_cache_gib": 10.54,
+        "kv_cache_tokens": 300373.0,
+        "attention_backend": "FLASHINFER",
+        "block_size": 1568.0
+      }
+    },
+    {
+      "variant": "cuda-graphs",
+      "args": [
+        "--safetensors-load-strategy",
+        "prefetch",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--gpu-memory-utilization",
+        "0.85",
+        "--max-model-len",
+        "4096",
+        "--max-num-seqs",
+        "8",
+        "--max-num-batched-tokens",
+        "2048",
+        "--reasoning-parser",
+        "qwen3",
+        "--disable-custom-all-reduce"
+      ],
+      "env": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_IB_DISABLE": "1"
+      },
+      "status": "ok",
+      "error": "",
+      "startup_s": 330.1070888862014,
+      "streaming": {
+        "distinct-c1": {
+          "config": "cuda-graphs",
+          "requests": 16,
+          "failed": 0,
+          "success_rate": 1.0,
+          "wall_s": 34.955289826728404,
+          "output_tokens": 2040,
+          "output_tokens_per_s": 58.360265645405214,
+          "requests_per_s": 0.45772757368945266,
+          "ttft_ms": {
+            "mean": 295.8853924064897,
+            "p50": 295.6109270453453,
+            "p95": 299.23139698803425,
+            "p99": 299.8423669487238
+          },
+          "tpot_ms": {
+            "mean": 14.928848653874416,
+            "p50": 14.929816552151845,
+            "p95": 14.961100704087986,
+            "p99": 14.96259236018958
+          },
+          "itl_ms": {
+            "mean": 14.926150987435106,
+            "p50": 14.937941916286945,
+            "p95": 15.168941579759121,
+            "p99": 15.351904556155205
+          },
+          "e2e_ms": {
+            "mean": 2184.380665945355,
+            "p50": 2189.4379975274205,
+            "p95": 2196.551078930497,
+            "p99": 2197.0109716057777
+          },
+          "gpu_mem_gb": 0.0
+        },
+        "shared_prefix-c1": {
+          "config": "cuda-graphs",
+          "requests": 16,
+          "failed": 0,
+          "success_rate": 1.0,
+          "wall_s": 24.003561222925782,
+          "output_tokens": 916,
+          "output_tokens_per_s": 38.16100417321115,
+          "requests_per_s": 0.6665677584840375,
+          "ttft_ms": {
+            "mean": 656.8498318083584,
+            "p50": 656.7533081397414,
+            "p95": 658.1568876281381,
+            "p99": 659.744206815958
+          },
+          "tpot_ms": {
+            "mean": 14.987149733149394,
+            "p50": 14.986066430407975,
+            "p95": 15.011448596071984,
+            "p99": 15.013150754384696
+          },
+          "itl_ms": {
+            "mean": 14.978007989729084,
+            "p50": 15.020106919109821,
+            "p95": 15.25278389453888,
+            "p99": 15.360712073743343
+          },
+          "e2e_ms": {
+            "mean": 1499.8768541263416,
+            "p50": 1495.877037756145,
+            "p95": 1524.404332973063,
+            "p99": 1527.334088459611
+          },
+          "gpu_mem_gb": 0.0
+        },
+        "distinct-c4": {
+          "config": "cuda-graphs",
+          "requests": 16,
+          "failed": 0,
+          "success_rate": 1.0,
+          "wall_s": 13.872520692646503,
+          "output_tokens": 2040,
+          "output_tokens_per_s": 147.0533038081072,
+          "requests_per_s": 1.153359245553782,
+          "ttft_ms": {
+            "mean": 812.3564135748893,
+            "p50": 848.7474648281932,
+            "p95": 1123.382424004376,
+            "p99": 1123.8165982067585
+          },
+          "tpot_ms": {
+            "mean": 20.89189051073761,
+            "p50": 20.609664342065496,
+            "p95": 24.88355743660917,
+            "p99": 24.932691403399637
+          },
+          "itl_ms": {
+            "mean": 20.87684529003604,
+            "p50": 18.586612306535244,
+            "p95": 18.97096075117588,
+            "p99": 20.168731920421124
+          },
+          "e2e_ms": {
+            "mean": 3453.172446228564,
+            "p50": 3465.568888001144,
+            "p95": 3713.553457520902,
+            "p99": 3713.8420790433884
+          },
+          "gpu_mem_gb": 0.0
+        },
+        "shared_prefix-c4": {
+          "config": "cuda-graphs",
+          "requests": 16,
+          "failed": 0,
+          "success_rate": 1.0,
+          "wall_s": 14.416975512169302,
+          "output_tokens": 930,
+          "output_tokens_per_s": 64.50728859288076,
+          "requests_per_s": 1.1098028145011742,
+          "ttft_ms": {
+            "mean": 1203.7653583684005,
+            "p50": 1278.1986286863685,
+            "p95": 2087.006699293852,
+            "p99": 2521.1648577824235
+          },
+          "tpot_ms": {
+            "mean": 41.64624895638808,
+            "p50": 40.73499257875873,
+            "p95": 51.74882981061403,
+            "p99": 55.05355026933455
+          },
+          "itl_ms": {
+            "mean": 36.66904446086068,
+            "p50": 18.725828267633915,
+            "p95": 19.465279765427113,
+            "p99": 639.250036329031
+          },
+          "e2e_ms": {
+            "mean": 3588.0504224915057,
+            "p50": 3570.6840343773365,
+            "p95": 4301.251047290862,
+            "p99": 5500.326815992594
+          },
+          "gpu_mem_gb": 0.0
+        },
+        "distinct-c8": {
+          "config": "cuda-graphs",
+          "requests": 16,
+          "failed": 0,
+          "success_rate": 1.0,
+          "wall_s": 10.024886386469007,
+          "output_tokens": 2044,
+          "output_tokens_per_s": 203.89258503307022,
+          "requests_per_s": 1.5960280628811758,
+          "ttft_ms": {
+            "mean": 1581.0941145173274,
+            "p50": 1726.73749178648,
+            "p95": 2145.2815625816584,
+            "p99": 2146.0427520796657
+          },
+          "tpot_ms": {
+            "mean": 26.88545435785607,
+            "p50": 25.807298257888302,
+            "p95": 36.60430134398731,
+            "p99": 36.67743028119558
+          },
+          "itl_ms": {
+            "mean": 26.885493412213222,
+            "p50": 22.670832462608814,
+            "p95": 23.178578354418278,
+            "p99": 25.612521916627884
+          },
+          "e2e_ms": {
+            "mean": 4988.849006360397,
+            "p50": 4982.772625051439,
+            "p95": 5277.854133397341,
+            "p99": 5277.899419888854
+          },
+          "gpu_mem_gb": 0.0
+        },
+        "shared_prefix-c8": {
+          "config": "cuda-graphs",
+          "requests": 16,
+          "failed": 0,
+          "success_rate": 1.0,
+          "wall_s": 12.489638759754598,
+          "output_tokens": 920,
+          "output_tokens_per_s": 73.66105759315624,
+          "requests_per_s": 1.281061871185326,
+          "ttft_ms": {
+            "mean": 2900.4798243404366,
+            "p50": 3110.080580227077,
+            "p95": 4904.258565977216,
+            "p99": 4975.089059211314
+          },
+          "tpot_ms": {
+            "mean": 58.636109155593864,
+            "p50": 59.558043139986694,
+            "p95": 97.7242474410949,
+            "p99": 98.25777698175183
+          },
+          "itl_ms": {
+            "mean": 57.25476445487558,
+            "p50": 22.85052463412285,
+            "p95": 23.84984213858843,
+            "p99": 1401.6251862049103
+          },
+          "e2e_ms": {
+            "mean": 6216.058720776346,
+            "p50": 6188.070925883949,
+            "p95": 7487.012191675603,
+            "p99": 7490.442208014429
+          },
+          "gpu_mem_gb": 0.0
+        }
+      },
+      "vllm_bench": {
+        "returncode": 0,
+        "tail": "graphs-c8.json', ignore_eos=False, self_timed=None, percentile_metrics=None, metric_percentiles='99', goodput=None, request_id_prefix='bench-a58c3046-', top_p=None, top_k=None, min_p=None, temperature=None, frequency_penalty=None, presence_penalty=None, repetition_penalty=None, served_model_name=None, lora_modules=None, lora_assignment='random', ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=0, chat_template_kwargs=None, extra_body=None, skip_tokenizer_init=False, insecure=False, plot_timeline=False, timeline_itl_thresholds='25,50', plot_dataset_stats=False)\nINFO 10-27 08:39:14 [utils.py:90] Sampling input_len from [512, 512] and output_len from [128, 128]\nWARNING: vllm bench serve no longer sets temperature==0 (greedy) in requests by default. The default will be determined on the server side and can be model/API specific. For the old behavior, include --temperature=0.\nStarting initial single prompt test run...\nSkipping endpoint ready check.\nStarting main benchmark run...\nTraffic request rate: inf\nBurstiness factor: 1.0 (Poisson process)\nMaximum request concurrency: 8\ntip: install termplotlib and gnuplot to plot the metrics\n============ Serving Benchmark Result ============\nSuccessful requests:                     32        \nFailed requests:                         0         \nMaximum request concurrency:             8         \nBenchmark duration (s):                  24.62     \nTotal input tokens:                      18064     \nTotal generated tokens:                  4096      \nRequest throughput (req/s):              1.30      \nOutput token throughput (tok/s):         166.38    \nPeak output token throughput (tok/s):    344.00    \nPeak concurrent requests:                16.00     \nTotal token throughput (tok/s):          900.14    \n---------------Time to First Token----------------\nMean TTFT (ms):                          2058.42   \nMedian TTFT (ms):                        2000.12   \nP99 TTFT (ms):                           3318.95   \n-----Time per Output Token (excl. 1st token)------\nMean TPOT (ms):                          32.14     \nMedian TPOT (ms):                        33.40     \nP99 TPOT (ms):                           44.63     \n---------------Inter-token Latency----------------\nMean ITL (ms):                           31.94     \nMedian ITL (ms):                         23.33     \nP99 ITL (ms):                            169.77    \n==================================================\n\n  0%|          | 0/32 [00:00<?, ?it/s]\n  3%|▎         | 1/32 [00:06<03:12,  6.20s/it]\n 16%|█▌        | 5/32 [00:06<00:27,  1.02s/it]\n 28%|██▊       | 9/32 [00:12<00:28,  1.23s/it]\n 41%|████      | 13/32 [00:12<00:14,  1.35it/s]\n 53%|█████▎    | 17/32 [00:18<00:14,  1.00it/s]\n 66%|██████▌   | 21/32 [00:18<00:07,  1.46it/s]\n 75%|███████▌  | 24/32 [00:20<00:04,  1.65it/s]\n 78%|███████▊  | 25/32 [00:24<00:07,  1.05s/it]\n100%|██████████| 32/32 [00:24<00:00,  2.01it/s]\n100%|██████████| 32/32 [00:24<00:00,  1.30it/s]\n"
+      },
+      "peak_gpu_mem_gb": 0.0,
+      "gpu_mem_error": "nvidia-smi not found",
+      "server_log_facts": {
+        "weights_gib": 9.27,
+        "kv_cache_gib": 9.17,
+        "kv_cache_tokens": 174307.0,
+        "attention_backend": "FLASH_ATTN",
+        "block_size": 784.0
+      }
+    }
+  ]
+}

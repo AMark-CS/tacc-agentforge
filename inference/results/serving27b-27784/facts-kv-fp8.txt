@@ -1,0 +1,9 @@
+(APIServer pid=62906) WARNING 10-27 08:27:58 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(EngineCore pid=62953) INFO 10-27 08:28:49 [core.py:116] Initializing a V1 LLM engine (v0.26.0) with config: model='/mnt/home/public/course-envs/CSIT6000V/project/qwen3.8-27b-v1/models/Qwen3.8-27B-AWQ-INT4', speculative_config=None, tokenizer='/mnt/h
+(Worker_TP0 pid=62971) INFO 10-27 08:29:57 [cuda.py:482] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER', 'TRITON_ATTN'].
+(Worker_TP1 pid=62972) INFO 10-27 08:30:07 [interface.py:905] Setting attention block size to 1568 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP0 pid=62971) INFO 10-27 08:30:07 [gpu_model_runner.py:5347] Model loading took 9.27 GiB memory and 9.334781 seconds
+(Worker_TP0 pid=62971) INFO 10-27 08:30:07 [interface.py:905] Setting attention block size to 1568 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP0 pid=62971) INFO 10-27 08:30:16 [gpu_worker.py:560] Available KV cache memory: 10.54 GiB
+(EngineCore pid=62953) INFO 10-27 08:30:17 [kv_cache_utils.py:2177] GPU KV cache size: 300,373 tokens
+(EngineCore pid=62953) WARNING 10-27 08:30:25 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none

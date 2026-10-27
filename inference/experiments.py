@@ -6,14 +6,18 @@ with that variant's flags, wait for readiness, run the streaming benchmark and
 changes per variant relative to the group's baseline. Failures (startup crash,
 timeout, unsupported flag) are recorded in the results, never dropped.
 
-Standard library only; `python` is the course interpreter (qwen-python on TACC).
+Standard library only; The default interpreter is the one running this script (qwen-python is a shell
+function on TACC, so subprocesses cannot look it up by name).
 Results are written after every variant so a killed job still leaves data.
 """
 import argparse
 import json
 import os
+import re
+import shutil
 import signal
 import subprocess
+import sys
 import threading
 import time
 from pathlib import Path
@@ -36,6 +40,8 @@ def load_group(matrix_path: Path, group: str) -> tuple[dict, list[dict]]:
     variants = [{"name": "baseline", "env": base.get("env", {}), "args": base["args"]}]
     for v in matrix["groups"][group]["variants"]:
         variants.append({"name": v["name"],
+                         **({"startup_timeout_s": v["startup_timeout_s"]}
+                            if "startup_timeout_s" in v else {}),
                          "env": {**base.get("env", {}), **v.get("env", {})},
                          "args": merge_args(base["args"], v.get("set", {}),
                                             v.get("remove", []), v.get("append", []))})
@@ -97,27 +103,59 @@ def workload_prompts(kind: str, n: int = 8) -> list[str]:
 
 
 class GpuMemoryPeak(threading.Thread):
-    """Poll nvidia-smi; keep the peak total used memory (GB) across visible GPUs."""
+    """Poll nvidia-smi; keep the peak total used memory (GB) across visible GPUs.
+
+    `error` stays set if nvidia-smi is missing or fails, so a 0.0 peak is never
+    mistaken for a real measurement.
+    """
+    CANDIDATES = ["nvidia-smi", "/usr/bin/nvidia-smi", "/usr/local/nvidia/bin/nvidia-smi",
+                  "/usr/local/cuda/bin/nvidia-smi"]
 
     def __init__(self, interval_s: float = 2.0):
         super().__init__(daemon=True)
-        self.interval_s, self.peak_gb, self._stop_event = interval_s, 0.0, threading.Event()
+        self.interval_s, self.peak_gb, self.error = interval_s, 0.0, "not polled yet"
+        self._stop_event = threading.Event()
+        self.binary = next((c for c in self.CANDIDATES if shutil.which(c)), None)
+        if self.binary is None:
+            self.error = "nvidia-smi not found"
 
     def run(self):
-        while not self._stop_event.is_set():
+        while self.binary and not self._stop_event.is_set():
             try:
                 out = subprocess.run(
-                    ["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
-                    capture_output=True, text=True, timeout=10).stdout
+                    [self.binary, "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
+                    capture_output=True, text=True, timeout=10)
                 self.peak_gb = max(self.peak_gb,
-                                   sum(float(x) for x in out.split()) / 1024)
-            except Exception:
-                pass
+                                   sum(float(x) for x in out.stdout.split()) / 1024)
+                self.error = ""
+            except Exception as exc:
+                self.error = repr(exc)
             self._stop_event.wait(self.interval_s)
 
     def stop(self) -> float:
         self._stop_event.set()
         return self.peak_gb
+
+
+LOG_PATTERNS = {
+    "weights_gib": r"Model loading took ([\d.]+) GiB",
+    "kv_cache_gib": r"Available KV cache memory: ([\d.]+) GiB",
+    "kv_cache_tokens": r"GPU KV cache size: ([\d,]+) tokens",
+    "attention_backend": r"Using (\w+) attention backend",
+    "block_size": r"block size to (\d+) tokens",
+}
+
+
+def parse_server_log(path: Path) -> dict:
+    """Pull memory/backend facts that vLLM prints at startup (robust to nvidia-smi issues)."""
+    text = Path(path).read_text(encoding="utf-8", errors="replace")
+    found = {}
+    for key, pattern in LOG_PATTERNS.items():
+        m = re.search(pattern, text)
+        if m:
+            value = m.group(1).replace(",", "")
+            found[key] = float(value) if re.fullmatch(r"[\d.]+", value) and key != "attention_backend" else value
+    return found
 
 
 def wait_ready(proc: subprocess.Popen, timeout_s: float) -> float | None:
@@ -158,7 +196,7 @@ def run_variant(python: str, model_path: str, settings: dict, variant: dict,
                             stdout=log, stderr=subprocess.STDOUT, env=env,
                             start_new_session=True)
     try:
-        ready_s = wait_ready(proc, settings["startup_timeout_s"])
+        ready_s = wait_ready(proc, variant.get("startup_timeout_s", settings["startup_timeout_s"]))
         if ready_s is None:
             record["error"] = "server not ready (crash or timeout); see server log"
             return record
@@ -172,6 +210,12 @@ def run_variant(python: str, model_path: str, settings: dict, variant: dict,
                     model=settings["served_name"], repeats=workload["repeats"],
                     concurrency=concurrency, max_tokens=workload["output_len"])
                 record["streaming"][f"{kind}-c{concurrency}"] = run.summary()
+                if run.n_failed == run.n_requests:
+                    # /health can pass while the engine is dead (e.g. JIT build failure
+                    # on the first request); don't spend the job's time on a dead server.
+                    first = next((r.error for r in run.records if r.error), "")
+                    record["error"] = f"every request failed: {first[:300]}"
+                    return record
         bench = subprocess.run(
             bench_command(python, model_path, settings, out_dir, name,
                           workload["concurrency"][-1]),
@@ -183,8 +227,10 @@ def run_variant(python: str, model_path: str, settings: dict, variant: dict,
         record["error"] = repr(exc)
     finally:
         record["peak_gpu_mem_gb"] = mem.stop()
+        record["gpu_mem_error"] = mem.error
         stop_server(proc)
         log.close()
+        record["server_log_facts"] = parse_server_log(out_dir / f"server-{name}.log")
     return record
 
 
@@ -193,7 +239,7 @@ def main() -> None:
     parser.add_argument("--matrix", type=Path, default=Path("configs/experiments.json"))
     parser.add_argument("--group", required=True)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--python", default=os.environ.get("VLLM_PYTHON", "qwen-python"))
+    parser.add_argument("--python", default=os.environ.get("VLLM_PYTHON", sys.executable))
     parser.add_argument("--deadline-s", type=float, default=3300,
                         help="stop launching variants when the job time is nearly up")
     parser.add_argument("--only", nargs="*", help="run just these variant names")

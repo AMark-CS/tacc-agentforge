@@ -1,0 +1,10 @@
+(EngineCore pid=63211) INFO 10-27 08:32:45 [core.py:116] Initializing a V1 LLM engine (v0.26.0) with config: model='/mnt/home/public/course-envs/CSIT6000V/project/qwen3.8-27b-v1/models/Qwen3.8-27B-AWQ-INT4', speculative_config=None, tokenizer='/mnt/h
+(Worker_TP0 pid=63230) INFO 10-27 08:33:47 [cuda.py:482] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(Worker_TP0 pid=63230) INFO 10-27 08:33:57 [gpu_model_runner.py:5347] Model loading took 9.27 GiB memory and 9.800159 seconds
+(Worker_TP0 pid=63230) INFO 10-27 08:33:57 [interface.py:905] Setting attention block size to 784 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP1 pid=63231) INFO 10-27 08:33:57 [interface.py:905] Setting attention block size to 784 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP0 pid=63230) INFO 10-27 08:35:27 [backends.py:393] Compiling a graph for compile range (1, 2048) takes 68.12 s
+(Worker_TP0 pid=63230) INFO 10-27 08:35:42 [monitor.py:53] torch.compile took 104.23 s in total
+(Worker_TP0 pid=63230) INFO 10-27 08:35:54 [gpu_worker.py:560] Available KV cache memory: 9.17 GiB
+(EngineCore pid=63211) INFO 10-27 08:35:54 [kv_cache_utils.py:2177] GPU KV cache size: 174,307 tokens
+(Worker_TP0 pid=63230) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/5 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  20%|██        | 1/5 [00:00<00:00,  7.00it/s]Capturing CUDA graphs (mixed

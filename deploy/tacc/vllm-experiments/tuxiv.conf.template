@@ -7,12 +7,13 @@ environment:
   dependencies:
     - "{}"
 job:
-  name: agentforge-exp
+  name: __JOBNAME__
   general:
     - partition=tacc
     - nodes=1
     - ntasks=1
     - cpus-per-task=8
     - gres=gpu:__GPUS__
+    - job-name=__JOBNAME__
     - time=01:00:00
     - output=${TACC_SLURM_USERLOG}/agentforge-exp-%j.log

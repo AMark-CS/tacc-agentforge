@@ -22,9 +22,9 @@
         {"name": "attn-flashinfer", "append": ["--attention-backend", "FLASHINFER"]},
         {"name": "attn-triton", "append": ["--attention-backend", "TRITON_ATTN"]},
         {"name": "prefix-caching", "append": ["--enable-prefix-caching"]},
-        {"name": "no-chunked-prefill", "append": ["--no-enable-chunked-prefill"]},
+        {"name": "no-chunked-prefill", "append": ["--no-enable-chunked-prefill"], "set": {"--max-num-batched-tokens": 4096}},
         {"name": "kv-fp8", "append": ["--kv-cache-dtype", "fp8"]},
-        {"name": "cuda-graphs", "remove": ["--enforce-eager"]}
+        {"name": "cuda-graphs", "remove": ["--enforce-eager"], "startup_timeout_s": 900}
       ]
     },
     "paged-quant": {
@@ -39,7 +39,6 @@
         {"name": "block-32", "append": ["--block-size", "32"]},
         {"name": "prefix-caching", "append": ["--enable-prefix-caching"]},
         {"name": "quant-fp8-weight", "append": ["--quantization", "fp8"]},
-        {"name": "quant-bnb-int8", "append": ["--quantization", "bitsandbytes"]},
         {"name": "kv-fp8", "append": ["--kv-cache-dtype", "fp8"]}
       ]
     }

@@ -1,0 +1,8 @@
+(APIServer pid=56977) WARNING 10-27 07:32:01 [config.py:563] Mamba cache mode is set to 'align' for Qwen3_5ForConditionalGeneration by default when prefix caching is enabled
+(APIServer pid=56977) INFO 10-27 07:32:01 [config.py:583] Warning: Prefix caching in Mamba cache 'align' mode is currently enabled. Its support for Mamba layers is experimental. Please report any issues you may observe.
+(Worker_TP0 pid=57106) INFO 10-27 07:34:01 [cuda.py:482] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(Worker_TP1 pid=57107) INFO 10-27 07:34:11 [interface.py:905] Setting attention block size to 784 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP0 pid=57106) INFO 10-27 07:34:11 [gpu_model_runner.py:5347] Model loading took 9.27 GiB memory and 8.935244 seconds
+(Worker_TP0 pid=57106) INFO 10-27 07:34:11 [interface.py:905] Setting attention block size to 784 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP0 pid=57106) INFO 10-27 07:34:20 [gpu_worker.py:560] Available KV cache memory: 10.54 GiB
+(EngineCore pid=57062) INFO 10-27 07:34:20 [kv_cache_utils.py:2177] GPU KV cache size: 150,186 tokens
