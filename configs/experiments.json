@@ -1,0 +1,47 @@
+{
+  "_comment": "One factor changes per variant vs. the group baseline. Flags verified against the actual vLLM 0.26.0 help once probe-env has run; unsupported ones are recorded as failed, not removed.",
+  "common": {
+    "served_name": "qwen3.8-27b",
+    "workload": {"input_len": 512, "output_len": 128, "num_prompts": 32,
+                 "concurrency": [1, 4, 8], "prompt_kinds": ["distinct", "shared_prefix"],
+                 "repeats": 2}
+  },
+  "groups": {
+    "serving27b": {
+      "settings": {"model_path": "$QWEN_MODEL_PATH", "tensor_parallel_size": 2,
+                   "startup_timeout_s": 600},
+      "baseline": {
+        "env": {"NCCL_P2P_DISABLE": "1", "NCCL_IB_DISABLE": "1"},
+        "args": ["--safetensors-load-strategy", "prefetch", "--language-model-only",
+                 "--dtype", "bfloat16", "--gpu-memory-utilization", "0.85",
+                 "--max-model-len", "4096", "--max-num-seqs", "8",
+                 "--max-num-batched-tokens", "2048", "--reasoning-parser", "qwen3",
+                 "--enforce-eager", "--disable-custom-all-reduce"]
+      },
+      "variants": [
+        {"name": "attn-flashinfer", "append": ["--attention-backend", "FLASHINFER"]},
+        {"name": "attn-triton", "append": ["--attention-backend", "TRITON_ATTN"]},
+        {"name": "prefix-caching", "append": ["--enable-prefix-caching"]},
+        {"name": "no-chunked-prefill", "append": ["--no-enable-chunked-prefill"]},
+        {"name": "kv-fp8", "append": ["--kv-cache-dtype", "fp8"]},
+        {"name": "cuda-graphs", "remove": ["--enforce-eager"]}
+      ]
+    },
+    "paged-quant": {
+      "settings": {"model_path": "$SMALL_MODEL_PATH", "tensor_parallel_size": 1,
+                   "startup_timeout_s": 420},
+      "baseline": {
+        "args": ["--dtype", "bfloat16", "--gpu-memory-utilization", "0.85",
+                 "--max-model-len", "4096", "--max-num-seqs", "16", "--enforce-eager"]
+      },
+      "variants": [
+        {"name": "block-8", "append": ["--block-size", "8"]},
+        {"name": "block-32", "append": ["--block-size", "32"]},
+        {"name": "prefix-caching", "append": ["--enable-prefix-caching"]},
+        {"name": "quant-fp8-weight", "append": ["--quantization", "fp8"]},
+        {"name": "quant-bnb-int8", "append": ["--quantization", "bitsandbytes"]},
+        {"name": "kv-fp8", "append": ["--kv-cache-dtype", "fp8"]}
+      ]
+    }
+  }
+}

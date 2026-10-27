@@ -12,3 +12,9 @@ slurm_log/
 *.key
 id_rsa*
 id_ed25519*
+deploy/tacc/vllm-experiments/benchmark.py
+deploy/tacc/vllm-experiments/experiments.py
+deploy/tacc/vllm-experiments/experiments.json
+deploy/tacc/vllm-experiments/tuxiv.conf
+deploy/tacc/vllm-experiments/group.txt
+deploy/tacc/vllm-experiments/only.txt

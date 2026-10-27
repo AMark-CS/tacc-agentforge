@@ -1,0 +1,18 @@
+entrypoint:
+  - /usr/bin/python3 ${TACC_WORKDIR}/main.py
+environment:
+  name: mpi-gemm-v1
+  channels:
+    - nodefaults
+  dependencies:
+    - "{}"
+job:
+  name: agentforge-exp
+  general:
+    - partition=tacc
+    - nodes=1
+    - ntasks=1
+    - cpus-per-task=8
+    - gres=gpu:__GPUS__
+    - time=01:00:00
+    - output=${TACC_SLURM_USERLOG}/agentforge-exp-%j.log
