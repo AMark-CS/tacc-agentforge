@@ -1,0 +1,8 @@
+(APIServer pid=15523) INFO 10-27 13:51:25 [api_utils.py:273] non-default args: {'host': '127.0.0.1', 'model': '/mnt/home/public/course-envs/CSIT6000V/project/qwen3.8-27b-v1/models/Qwen3.8-27B-AWQ-INT4', 'dtype': 'bfloat16', 'max_model_len': 4096, 'se
+(APIServer pid=15523) WARNING 10-27 13:51:32 [arg_utils.py:2536] This model does not officially support disabling chunked prefill. Disabling this manually may cause the engine to crash or produce incorrect outputs.
+(EngineCore pid=15570) INFO 10-27 13:52:32 [core.py:116] Initializing a V1 LLM engine (v0.26.0) with config: model='/mnt/home/public/course-envs/CSIT6000V/project/qwen3.8-27b-v1/models/Qwen3.8-27B-AWQ-INT4', speculative_config=None, tokenizer='/mnt/h
+(Worker_TP0 pid=15590) INFO 10-27 13:53:39 [cuda.py:482] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(Worker_TP0 pid=15590) INFO 10-27 13:53:49 [gpu_model_runner.py:5347] Model loading took 9.27 GiB memory and 9.752119 seconds
+(Worker_TP0 pid=15590) INFO 10-27 13:53:49 [interface.py:905] Setting attention block size to 784 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP1 pid=15591) INFO 10-27 13:53:49 [interface.py:905] Setting attention block size to 784 tokens to ensure that attention page size is >= mamba page size.
+(Worker_TP0 pid=15590) INFO 10-27 13:55:12 [monitor.py:53] torch.compile took 81.62 s in total

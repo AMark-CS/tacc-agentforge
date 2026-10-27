@@ -63,3 +63,14 @@ def test_all_failures_mark_variant_failed(monkeypatch, tmp_path):
                              "concurrency": [1], "prompt_kinds": ["distinct"], "repeats": 1}}
     rec = ex.run_variant("python", "/m", settings, {"name": "v", "env": {}, "args": []}, tmp_path)
     assert rec["status"] == "failed" and "every request failed" in rec["error"]
+
+
+def test_gpu_memory_peak_tracks_per_gpu_and_total():
+    import time
+    from inference.experiments import GpuMemoryPeak
+    readings = iter([[1.0, 2.0], [3.0, 1.0], [2.0, 2.0]])
+    mem = GpuMemoryPeak(interval_s=0.01, reader=lambda: next(readings))
+    mem.start()
+    time.sleep(0.3)
+    total = mem.stop()
+    assert mem.peak_per_gpu_gb == [3.0, 2.0] and total == 4.0

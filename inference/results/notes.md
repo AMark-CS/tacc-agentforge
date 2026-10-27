@@ -1,11 +1,12 @@
 ## Findings
 
-Each stage has 16 requests and most variants ran once. The CUDA-graphs configuration happens to have run
-twice (as `cuda-graphs` in Group A, job 27784, and as `baseline` in Group B, job 27795), which gives a
-measure of repeatability: throughput and TPOT agree within about 1% (58.4 vs 58.4 tok/s at c1, 203.9 vs
-203.5 at c8, TPOT 14.9 vs 14.9 ms), but p50 TTFT differs by up to about 30% (849 vs 1091 ms at c4 on
-distinct prompts). So throughput/TPOT differences above roughly 5% are meaningful here, while TTFT
-differences need to be above roughly 30% to be trusted. Group A's baseline is eager mode.
+Each stage has 16 requests. The CUDA-graphs configuration ran three times in separate jobs (as `cuda-graphs`
+in Group A, job 27784, and as `baseline` in Group B, jobs 27795 and 27798), which measures repeatability:
+throughput and TPOT agree within about 1% (58.4 / 58.4 / 58.5 tok/s at c1; 203.9 / 203.5 / 203.4 at c8;
+TPOT 14.9 ms in all three), while p50 TTFT varies more (distinct c4: 849 / 1091 / 1090 ms; shared-prefix
+c8: 3110 / 2857 / 3465 ms, up to about 30%). So throughput and TPOT differences above roughly 5% are
+meaningful, while TTFT differences need to be above roughly 30% to be trusted. Group B compares each variant
+with the baseline from its own job. Group A's baseline is eager mode.
 
 1. **CUDA graphs are the biggest single improvement.** TPOT at concurrency 1 fell from 86 ms to 15 ms
    (5.8x), and output throughput at concurrency 8 on distinct prompts rose from 67 to 204 tok/s
@@ -23,19 +24,27 @@ differences need to be above roughly 30% to be trusted. Group A's baseline is ea
    130,730 tokens), because vLLM switches this hybrid model's Mamba layers into an "align" cache mode that
    it labels experimental.
 
-3. **Attention backend: FlashAttention-2 and Triton are equivalent here.** Triton is within about 5% on
-   TPOT and throughput in every stage. Its TTFT at c8 was 32% higher on distinct prompts, which is inside
-   the roughly 30% TTFT noise seen when the same configuration ran twice, so I do not count it as an
-   effect. FlashAttention-2 is the default and the safer choice. This was tested in eager mode only.
+3. **Attention backend: FlashAttention-2 and Triton are equivalent.** In eager mode Triton is within about 5%
+   on TPOT and throughput in every stage, and with CUDA graphs on it is identical (204.1 vs 203.4 tok/s at
+   c8, TPOT 25.6 vs 25.8 ms, 59.2 vs 58.5 tok/s at c1). The one eager-mode TTFT outlier (+32% at c8) is inside
+   the TTFT noise. FlashAttention-2 remains the default and the safer choice. Triton's KV cache was about
+   10% smaller (174,307 vs 193,877 tokens) in that comparison; I did not investigate why.
 
-4. **Disabling chunked prefill shows no consistent effect.** Throughput at c8 was +7% by the streaming
-   client but -6% by `vllm bench serve`, and TTFT moved in both directions. This variant also changed
-   `--max-num-batched-tokens` from 2048 to 4096 (vLLM requires it to be at least the 4096 context when
-   chunking is off), so it is not a single-factor test. vLLM also warns that this model does not
-   officially support disabling chunked prefill.
+4. **Disabling chunked prefill shows no consistent effect.** In eager mode throughput at c8 was +7% by the
+   streaming client but -6% by `vllm bench serve`. With CUDA graphs on, throughput is identical to the
+   baseline in every stage (203.8 vs 203.4 tok/s at c8). The only visible differences are at shared-prefix c4
+   (TPOT 29.6 vs 40.6 ms, but TTFT 1892 vs 1286 ms), which I would not trust from one run given the noise
+   above. The variant also changed `--max-num-batched-tokens` from 2048 to 4096 (vLLM requires it to be at
+   least the 4096 context when chunking is off), so it is not a single-factor test, and vLLM warns that this
+   model does not officially support disabling chunked prefill.
 
 5. **Startup was slower on the first run.** It took 530 s, probably because the 19.6 GiB of weights
    had to be read from NFS (cold cache); later runs took 200-330 s. I did not isolate the cause.
+
+6. **GPU memory.** Peak memory (NVML, job 27798) was 21.0 GiB per GPU for the CUDA-graphs baseline, 20.0 with
+   Triton and 20.5 without chunked prefill, out of about 23.7 GiB. This is mostly memory vLLM reserves
+   up front (85% target plus CUDA context and graphs), not what the model strictly needs: the weights take
+   9.27 GiB per GPU.
 
 ## Unsupported on this cluster
 
@@ -53,22 +62,22 @@ differences need to be above roughly 30% to be trusted. Group A's baseline is ea
 
 ## What was not tested
 
-- **Other flags under CUDA graphs.** Only prefix caching was repeated on the CUDA-graphs baseline. The
-  attention-backend and chunked-prefill comparisons ran in eager mode only.
+- **Prefix caching plus the other flags, and kv-fp8.** Prefix caching was tested only on top of CUDA graphs and
+  eager mode separately; combinations with Triton or chunked-prefill changes were not run.
 - **Precision comparisons (INT8/INT4/FP8 weights).** Only the AWQ INT4 checkpoint exists on the cluster
   and the nodes have no internet access to fetch another model. Weight-quantization differences
   are therefore not measured.
 - **PagedAttention.** It is always on in vLLM and cannot be disabled, and the block size is forced to
   784 tokens by the hybrid layers, so there was nothing to vary.
-- **Repeats.** Apart from the CUDA-graphs configuration noted above, no variant was run twice.
+- **Repeats.** Only the CUDA-graphs baseline ran more than once; every other variant ran a single time.
+- **Longer prompts and more concurrency.** Everything ran with a 4K context, 128 output tokens and up to 8
+  concurrent requests.
 
 ## Next steps
 
-1. Run `attn-triton` and `no-chunked-prefill` on the CUDA-graphs baseline if those flags matter for the
-   final setup, with at least 3 repeats.
-2. Capture peak GPU memory: `nvidia-smi` was not found on the job's path, so only vLLM's own startup log
-   figures (weights 9.27 GiB per GPU, KV cache sizes) are reported.
-3. Decide with the course staff whether a CUDA 12 toolchain or a smaller second checkpoint can be made
+1. Decide with the course staff whether a CUDA 12 toolchain or a smaller second checkpoint can be made
    available, which would unlock FlashInfer, FP8 KV and the quantization comparison.
-4. Recommended serving configuration from these runs: CUDA graphs on, prefix caching on for workloads with
+2. Repeat `prefix-caching` at least twice more, and test a longer shared prefix and higher concurrency,
+   since that is the variant with a real effect.
+3. Recommended serving configuration from these runs: CUDA graphs on, prefix caching on for workloads with
    shared prompt prefixes (such as a fixed system prompt plus evidence), FlashAttention-2.

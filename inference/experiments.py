@@ -103,30 +103,55 @@ def workload_prompts(kind: str, n: int = 8) -> list[str]:
 
 
 class GpuMemoryPeak(threading.Thread):
-    """Poll nvidia-smi; keep the peak total used memory (GB) across visible GPUs.
+    """Poll GPU memory; keep the peak per GPU and the peak total (GB).
 
-    `error` stays set if nvidia-smi is missing or fails, so a 0.0 peak is never
-    mistaken for a real measurement.
+    Reads through NVML (`pynvml`, installed with vLLM) and falls back to nvidia-smi, because
+    nvidia-smi was not on the job's PATH in the first runs. `error` stays set if neither works,
+    so a 0.0 peak is never mistaken for a real measurement. `reader` may be injected for tests.
     """
     CANDIDATES = ["nvidia-smi", "/usr/bin/nvidia-smi", "/usr/local/nvidia/bin/nvidia-smi",
                   "/usr/local/cuda/bin/nvidia-smi"]
 
-    def __init__(self, interval_s: float = 2.0):
+    def __init__(self, interval_s: float = 2.0, reader=None):
         super().__init__(daemon=True)
-        self.interval_s, self.peak_gb, self.error = interval_s, 0.0, "not polled yet"
+        self.interval_s, self.peak_gb, self.peak_per_gpu_gb = interval_s, 0.0, []
+        self.error, self.source = "not polled yet", ""
         self._stop_event = threading.Event()
-        self.binary = next((c for c in self.CANDIDATES if shutil.which(c)), None)
-        if self.binary is None:
-            self.error = "nvidia-smi not found"
+        self.reader = reader
+        if reader is not None:
+            self.source = "injected"
+        else:
+            self.reader, self.source = self._find_reader()
+        if self.reader is None:
+            self.error = "no GPU memory reader (pynvml and nvidia-smi both unavailable)"
+
+    def _find_reader(self):
+        try:
+            import pynvml
+            pynvml.nvmlInit()
+            handles = [pynvml.nvmlDeviceGetHandleByIndex(i)
+                       for i in range(pynvml.nvmlDeviceGetCount())]
+            return (lambda: [pynvml.nvmlDeviceGetMemoryInfo(h).used / 2**30 for h in handles],
+                    "pynvml")
+        except Exception:
+            pass
+        binary = next((c for c in self.CANDIDATES if shutil.which(c)), None)
+        if binary:
+            def read():
+                out = subprocess.run(
+                    [binary, "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
+                    capture_output=True, text=True, timeout=10).stdout
+                return [float(x) / 1024 for x in out.split()]
+            return read, "nvidia-smi"
+        return None, ""
 
     def run(self):
-        while self.binary and not self._stop_event.is_set():
+        while self.reader and not self._stop_event.is_set():
             try:
-                out = subprocess.run(
-                    [self.binary, "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
-                    capture_output=True, text=True, timeout=10)
-                self.peak_gb = max(self.peak_gb,
-                                   sum(float(x) for x in out.stdout.split()) / 1024)
+                used = self.reader()
+                self.peak_gb = max(self.peak_gb, sum(used))
+                self.peak_per_gpu_gb = [max(a, b) for a, b in zip(
+                    self.peak_per_gpu_gb or [0.0] * len(used), used)]
                 self.error = ""
             except Exception as exc:
                 self.error = repr(exc)
@@ -228,6 +253,8 @@ def run_variant(python: str, model_path: str, settings: dict, variant: dict,
     finally:
         record["peak_gpu_mem_gb"] = mem.stop()
         record["gpu_mem_error"] = mem.error
+        record["gpu_mem_source"] = mem.source
+        record["peak_gpu_mem_per_gpu_gb"] = [round(x, 2) for x in mem.peak_per_gpu_gb]
         stop_server(proc)
         log.close()
         record["server_log_facts"] = parse_server_log(out_dir / f"server-{name}.log")

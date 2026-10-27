@@ -42,13 +42,33 @@ def load_runs(folders: list[Path]) -> list[dict]:
             bench = folder / f"vllmbench-{r['variant']}-c8.json"
             r["bench"] = json.loads(bench.read_text()) if bench.exists() else None
             name = r["variant"]
-            if name not in index:
+            if name == "baseline":
+                runs.append(r)  # one baseline per job, so each variant has a same-job reference
+            elif name not in index:
                 index[name] = len(runs)
                 runs.append(r)
             elif real_failure(runs[index[name]]) and not real_failure(r):
                 r["retry_of"] = f"{runs[index[name]]['source']}: {real_failure(runs[index[name]])[:160]}"
                 runs[index[name]] = r
+    baselines = [r for r in runs if r["variant"] == "baseline"]
+    for r in baselines:
+        r["display"] = f"baseline ({r['source'].split('-')[-1]})" if len(baselines) > 1 else "baseline"
     return runs
+
+
+def name(r: dict) -> str:
+    return r.get("display", r["variant"])
+
+
+def reference(runs: list[dict], r: dict) -> dict:
+    """The baseline from the same job as `r`, else the first baseline."""
+    baselines = [b for b in runs if b["variant"] == "baseline"]
+    return next((b for b in baselines if b["source"] == r["source"]), baselines[0])
+
+
+def mem_cell(r: dict) -> str:
+    per_gpu = r.get("peak_gpu_mem_per_gpu_gb") or []
+    return f"{max(per_gpu):.1f}" if per_gpu and max(per_gpu) > 0 else "n/a"
 
 
 def real_failure(r: dict) -> str:
@@ -74,20 +94,19 @@ def delta(value, base, lower_is_better):
 
 
 def summary_table(runs: list[dict], stage: str = "distinct-c8") -> str:
-    base = next(r for r in runs if r["variant"] == "baseline")["streaming"][stage]
-    lines = ["| Variant | Result | Startup (s) | KV cache (tokens) | Output tok/s | TTFT p50 (ms) | TPOT p50 (ms) |",
-             "| --- | --- | --- | --- | --- | --- | --- |"]
+    lines = ["| Variant | Result | Startup (s) | KV cache (tokens) | GPU mem (GiB/GPU) | Output tok/s | TTFT p50 (ms) | TPOT p50 (ms) |",
+             "| --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in runs:
         fail = real_failure(r)
-        facts = r["facts"]
-        kv = facts.get("kv_cache_tokens")
+        kv = r["facts"].get("kv_cache_tokens")
         if fail:
-            lines.append(f"| {r['variant']} | FAILED | {fmt(r.get('startup_s'), 0)} | "
-                         f"{fmt(kv, 0)} | - | - | - |")
+            lines.append(f"| {name(r)} | FAILED | {fmt(r.get('startup_s'), 0)} | "
+                         f"{fmt(kv, 0)} | {mem_cell(r)} | - | - | - |")
             continue
         s = r["streaming"][stage]
+        base = reference(runs, r)["streaming"][stage]
         lines.append(
-            f"| {r['variant']} | ok | {fmt(r.get('startup_s'), 0)} | {fmt(kv, 0)} | "
+            f"| {name(r)} | ok | {fmt(r.get('startup_s'), 0)} | {fmt(kv, 0)} | {mem_cell(r)} | "
             f"{fmt(s['output_tokens_per_s'])}{delta(s['output_tokens_per_s'], base['output_tokens_per_s'], False)} | "
             f"{fmt(s['ttft_ms']['p50'], 0)}{delta(s['ttft_ms']['p50'], base['ttft_ms']['p50'], True)} | "
             f"{fmt(s['tpot_ms']['p50'])}{delta(s['tpot_ms']['p50'], base['tpot_ms']['p50'], True)} |")
@@ -99,7 +118,7 @@ def detail_tables(runs: list[dict]) -> str:
     for r in runs:
         if real_failure(r):
             continue
-        out.append(f"#### {r['variant']}\n")
+        out.append(f"#### {name(r)}\n")
         out.append("| Stage | OK/total | Output tok/s | TTFT p50 / p95 (ms) | TPOT p50 / p95 (ms) | E2E p50 (ms) |")
         out.append("| --- | --- | --- | --- | --- | --- |")
         for st in STAGES:
@@ -123,7 +142,7 @@ def bench_table(runs: list[dict]) -> str:
         if not b or real_failure(r):
             continue
         lines.append(
-            f"| {r['variant']} | {b['completed']}/{b['failed']} | {fmt(b['output_throughput'])} | "
+            f"| {name(r)} | {b['completed']}/{b['failed']} | {fmt(b['output_throughput'])} | "
             f"{fmt(b['total_token_throughput'])} | {fmt(b['request_throughput'], 2)} | "
             f"{fmt(b['mean_ttft_ms'], 0)} / {fmt(b['p99_ttft_ms'], 0)} | "
             f"{fmt(b['mean_tpot_ms'])} / {fmt(b['p99_tpot_ms'])} | {fmt(b['mean_itl_ms'])} |")
@@ -131,7 +150,7 @@ def bench_table(runs: list[dict]) -> str:
 
 
 def failure_list(runs: list[dict]) -> str:
-    items = [f"- **{r['variant']}**: {real_failure(r)[:400]}" for r in runs if real_failure(r)]
+    items = [f"- **{name(r)}**: {real_failure(r)[:400]}" for r in runs if real_failure(r)]
     return "\n".join(items) or "None."
 
 
@@ -149,7 +168,7 @@ def group_section(group: str, runs: list[dict]) -> str:
     srcs = ", ".join(sorted({r["source"] for r in runs}))
     return f"""## {title}
 
-{blurb} Source folders: {srcs}. Percentages compare with this group's baseline;
+{blurb} Source folders: {srcs}. Percentages compare each variant with the baseline from its own job;
 changes under 3% are shown as "~same".
 
 ### Distinct prompts, concurrency 8
@@ -208,8 +227,9 @@ Generated by `inference/report.py`. Raw data is in `inference/results/`.
   for how far those two agree.
 - `shared_prefix` and `distinct` prompts produce different output lengths, so compare TTFT and TPOT
   across prompt sets rather than raw tokens/s.
-- Peak GPU memory was not captured in these runs (nvidia-smi was not reachable); memory figures come from
-  vLLM's own startup log (weights and KV-cache size).
+- Peak GPU memory was captured (through NVML) only in job 27798; earlier jobs show "n/a" because
+  nvidia-smi was not reachable. It reflects memory vLLM reserves (85% utilization target), not the minimum
+  the model needs. Weight and KV-cache sizes from vLLM's startup log are shown for every run.
 - PagedAttention is always on in vLLM and cannot be disabled, so it is not an on/off variant here.
   Block size cannot be varied on this model because vLLM forces 784-token blocks for the hybrid
   (Mamba + attention) layers. Quantization precision comparisons need a second checkpoint, which is not

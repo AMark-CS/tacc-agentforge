@@ -39,7 +39,10 @@
                  "--disable-custom-all-reduce"]
       },
       "variants": [
-        {"name": "prefix-caching", "append": ["--enable-prefix-caching"]}
+        {"name": "prefix-caching", "append": ["--enable-prefix-caching"]},
+        {"name": "attn-triton", "append": ["--attention-backend", "TRITON_ATTN"]},
+        {"name": "no-chunked-prefill", "append": ["--no-enable-chunked-prefill"],
+         "set": {"--max-num-batched-tokens": 4096}}
       ]
     },
     "paged-quant": {
