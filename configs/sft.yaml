@@ -1,0 +1,11 @@
+# Task 7. Fill in after inspecting TACC resources and licensing.
+base_model: TODO
+base_revision: TODO
+train_file: data/sft/train.jsonl
+output_dir: outputs/sft
+lora_r: 16
+lora_alpha: 32
+learning_rate: 2.0e-4
+epochs: 1
+max_seq_len: 4096
+seed: 0

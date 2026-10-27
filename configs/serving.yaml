@@ -1,0 +1,5 @@
+# Verified 2026-10-16: eager, 4K context, tensor parallel 2. See deploy/tacc/README.md.
+model: qwen3.8-27b
+tensor_parallel_size: 2
+max_model_len: 4096
+enforce_eager: true

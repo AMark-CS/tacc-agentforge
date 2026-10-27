@@ -1,0 +1,4 @@
+# Task 8. Every entry quantizes the SAME source model.
+variants:
+  - {source_model: TODO, method: awq,  bits: 4, calibration_file: data/calib/dev.jsonl, output_dir: outputs/quant/int4}
+  - {source_model: TODO, method: int8, bits: 8, calibration_file: data/calib/dev.jsonl, output_dir: outputs/quant/int8}

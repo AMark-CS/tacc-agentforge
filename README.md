@@ -74,7 +74,7 @@ tacc-agentforge/
 |- knowledge/      # SerpApi acquisition, SQLite evidence, and retrieval
 |- training/       # Post-training and adapter export
 |- quantization/   # Model calibration and quantization
-|- inference/      # Model loading and inference service
+|- inference/      # Model client and serving benchmark
 |- configs/        # Model, agent, and experiment configurations
 |- scripts/        # TACC deployment and job scripts
 |- evaluations/    # Benchmarks and evaluation tasks
@@ -83,7 +83,8 @@ tacc-agentforge/
 `- README.md
 ```
 
-Directories will be added as the implementation develops.
+`app/`, `knowledge/` and `evaluations/` are empty placeholders for their owners.
+Stub modules raise `NotImplementedError("TODO(Task N)")`; see [tasks/todo.md](tasks/todo.md).
 
 ## Roadmap
 

@@ -1,0 +1,14 @@
+[project]
+name = "tacc-agentforge"
+version = "0.0.1"
+description = "Shopping and budget advisor on TACC (course project)"
+requires-python = ">=3.10"
+dependencies = []  # runtime code is standard-library only
+
+[project.optional-dependencies]
+dev = ["pytest"]
+train = ["torch", "transformers", "peft", "trl", "datasets", "pyyaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
