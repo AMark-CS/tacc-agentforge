@@ -27,6 +27,21 @@
         {"name": "cuda-graphs", "remove": ["--enforce-eager"], "startup_timeout_s": 900}
       ]
     },
+    "graphs": {
+      "settings": {"model_path": "$QWEN_MODEL_PATH", "tensor_parallel_size": 2,
+                   "startup_timeout_s": 900},
+      "baseline": {
+        "env": {"NCCL_P2P_DISABLE": "1", "NCCL_IB_DISABLE": "1"},
+        "args": ["--safetensors-load-strategy", "prefetch", "--language-model-only",
+                 "--dtype", "bfloat16", "--gpu-memory-utilization", "0.85",
+                 "--max-model-len", "4096", "--max-num-seqs", "8",
+                 "--max-num-batched-tokens", "2048", "--reasoning-parser", "qwen3",
+                 "--disable-custom-all-reduce"]
+      },
+      "variants": [
+        {"name": "prefix-caching", "append": ["--enable-prefix-caching"]}
+      ]
+    },
     "paged-quant": {
       "settings": {"model_path": "$SMALL_MODEL_PATH", "tensor_parallel_size": 1,
                    "startup_timeout_s": 420},
