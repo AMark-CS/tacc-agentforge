@@ -54,7 +54,8 @@ def normal(query, n):
     meta = {"id": f"search{n}", "processed_at": "2026-10-28 01:02:03 UTC", "total_time_taken": 1.5}
     if query["engine"] == "google_shopping":
         results = [{"product_id": str(100 + i), "title": f"Item {i}", "price": f"${10 + i}.99",
-                    "source": "Shop", "product_link": f"https://x/?api_key={KEY}"} for i in range(4)]
+                    "source": "Shop", "immersive_product_page_token": f"tok{100 + i}",
+                    "product_link": f"https://x/?api_key={KEY}"} for i in range(4)]
         return 200, {"search_metadata": meta, "shopping_results": results}
     return 200, {"search_metadata": meta, "product_results": {"title": "Detail"}}
 
@@ -160,6 +161,29 @@ class ClientTests(unittest.TestCase):
         # 2 searches + 3 distinct products (the second query returns the same ids)
         self.assertEqual(summary["calls_made"], 5)
         self.assertEqual(summary["stopped"], "finished")
+
+    def test_detail_lookup_uses_page_token(self):
+        fake = FakeSerpApi(normal)
+        try:
+            client = self.client(fake)
+            sp.collect(client, [{"q": "a"}], products_per_query=2)
+        finally:
+            fake.close()
+        detail = [r for r in fake.requests if r["engine"] == "google_product"]
+        self.assertEqual(len(detail), 2)
+        self.assertTrue(all(r.get("page_token", "").startswith("tok") for r in detail))
+        self.assertTrue(all("product_id" not in r for r in detail))
+
+    def test_detail_lookup_falls_back_to_product_id(self):
+        fake = FakeSerpApi(normal)
+        try:
+            self.client(fake).get_product(product_id="555")
+            with self.assertRaises(ValueError):
+                self.client(fake).get_product()
+        finally:
+            fake.close()
+        self.assertEqual(fake.requests[0]["product_id"], "555")
+        self.assertNotIn("page_token", fake.requests[0])
 
     def test_collect_stops_when_budget_runs_out(self):
         fake = FakeSerpApi(normal)

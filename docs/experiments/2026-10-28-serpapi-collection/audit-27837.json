@@ -1,0 +1,365 @@
+{
+  "run_dir": "/mnt/home/markzhang/USERDIR/data/serpapi/run-27837",
+  "calls": {
+    "google_shopping:ok": 8,
+    "google_product:error": 13,
+    "google_product:ok": 27
+  },
+  "errors": {
+    "Google Product hasn't returned any results for this query.": 13
+  },
+  "shopping": {
+    "queries": 8,
+    "result_rows": 320,
+    "unique_product_ids": 308,
+    "results_per_query": {
+      "wireless earbuds": 40,
+      "noise cancelling earbuds under 100": 40,
+      "usb-c wall charger 65w": 40,
+      "portable power bank 20000mah": 40,
+      "mechanical keyboard": 40,
+      "wireless keyboard and mouse combo": 40,
+      "laptop backpack 15.6 inch": 40,
+      "waterproof travel backpack": 40
+    },
+    "field_coverage": {
+      "extracted_price": "320/320 (100%)",
+      "rating": "271/320 (85%)",
+      "reviews": "271/320 (85%)",
+      "source": "319/320 (100%)",
+      "delivery": "194/320 (61%)",
+      "product_id": "320/320 (100%)",
+      "immersive_product_page_token": "319/320 (100%)",
+      "snippet": "186/320 (58%)",
+      "old_price": "106/320 (33%)"
+    },
+    "price_range_usd": {
+      "min": 1.64,
+      "median": 49.99,
+      "max": 4006.0
+    },
+    "currency_symbols": {
+      "$": 319,
+      "\u00a3": 1
+    }
+  },
+  "product_pages": {
+    "ok_pages": 27,
+    "pages_with_stores": 27,
+    "stores_per_page": {
+      "min": 3,
+      "median": 3,
+      "max": 5
+    },
+    "store_fields": {
+      "additional_costs": "86/86 (100%)",
+      "condition": "8/86 (9%)",
+      "coupon": "1/86 (1%)",
+      "details_and_offers": "86/86 (100%)",
+      "discount": "24/86 (28%)",
+      "extracted_original_price": "24/86 (28%)",
+      "extracted_price": "86/86 (100%)",
+      "extracted_total": "86/86 (100%)",
+      "immersive_product_page_token": "83/86 (97%)",
+      "link": "86/86 (100%)",
+      "logo": "86/86 (100%)",
+      "membership": "1/86 (1%)",
+      "merchant_id": "86/86 (100%)",
+      "name": "86/86 (100%)",
+      "original_price": "24/86 (28%)",
+      "payment_methods": "84/86 (98%)",
+      "position": "86/86 (100%)",
+      "price": "86/86 (100%)",
+      "rating": "50/86 (58%)",
+      "reviews": "50/86 (58%)",
+      "serpapi_immersive_product_api": "83/86 (97%)",
+      "shipping": "78/86 (91%)",
+      "shipping_extracted": "31/86 (36%)",
+      "tag": "16/86 (19%)",
+      "title": "86/86 (100%)",
+      "total": "86/86 (100%)"
+    },
+    "pages_with_attributes": 27,
+    "attributes_per_page": {
+      "min": 2,
+      "median": 6,
+      "max": 14
+    },
+    "pages_with_about_text": 24,
+    "pages_with_price_insights": 27,
+    "review_related_keys": [
+      "product_results.more_options[].reviews",
+      "product_results.stores[].reviews"
+    ],
+    "key_census": {
+      "product_results.about_the_product": {
+        "pages": 24,
+        "median_size": 1.0
+      },
+      "product_results.about_the_product.description": {
+        "pages": 24,
+        "median_size": 707.5
+      },
+      "product_results.brand": {
+        "pages": 25,
+        "median_size": 8
+      },
+      "product_results.discussions_and_forums": {
+        "pages": 15,
+        "median_size": 2
+      },
+      "product_results.discussions_and_forums[].comments": {
+        "pages": 9,
+        "median_size": 1
+      },
+      "product_results.discussions_and_forums[].date": {
+        "pages": 15,
+        "median_size": 11
+      },
+      "product_results.discussions_and_forums[].icon": {
+        "pages": 15,
+        "median_size": 136
+      },
+      "product_results.discussions_and_forums[].items": {
+        "pages": 12,
+        "median_size": 6.0
+      },
+      "product_results.discussions_and_forums[].link": {
+        "pages": 15,
+        "median_size": 97
+      },
+      "product_results.discussions_and_forums[].source": {
+        "pages": 15,
+        "median_size": 6
+      },
+      "product_results.discussions_and_forums[].title": {
+        "pages": 15,
+        "median_size": 65
+      },
+      "product_results.discussions_and_forums[].view_all": {
+        "pages": 4,
+        "median_size": 84.5
+      },
+      "product_results.more_options": {
+        "pages": 22,
+        "median_size": 16.0
+      },
+      "product_results.more_options[].discount": {
+        "pages": 6,
+        "median_size": 7.0
+      },
+      "product_results.more_options[].extracted_original_price": {
+        "pages": 6,
+        "median_size": 1.0
+      },
+      "product_results.more_options[].extracted_price": {
+        "pages": 22,
+        "median_size": 1.0
+      },
+      "product_results.more_options[].link": {
+        "pages": 22,
+        "median_size": 335.0
+      },
+      "product_results.more_options[].original_price": {
+        "pages": 6,
+        "median_size": 3.0
+      },
+      "product_results.more_options[].position": {
+        "pages": 22,
+        "median_size": 1.0
+      },
+      "product_results.more_options[].price": {
+        "pages": 22,
+        "median_size": 6.0
+      },
+      "product_results.more_options[].rating": {
+        "pages": 19,
+        "median_size": 1
+      },
+      "product_results.more_options[].reviews": {
+        "pages": 19,
+        "median_size": 1
+      },
+      "product_results.more_options[].seller": {
+        "pages": 22,
+        "median_size": 8.0
+      },
+      "product_results.more_options[].serpapi_link": {
+        "pages": 22,
+        "median_size": 1828.5
+      },
+      "product_results.more_options[].thumbnail": {
+        "pages": 22,
+        "median_size": 174.0
+      },
+      "product_results.more_options[].title": {
+        "pages": 22,
+        "median_size": 37.5
+      },
+      "product_results.page_token": {
+        "pages": 26,
+        "median_size": 1415.0
+      },
+      "product_results.price_insights": {
+        "pages": 27,
+        "median_size": 4
+      },
+      "product_results.price_insights.currency": {
+        "pages": 26,
+        "median_size": 3.0
+      },
+      "product_results.price_insights.price_history": {
+        "pages": 26,
+        "median_size": 1.0
+      },
+      "product_results.price_insights.price_tracking_available": {
+        "pages": 26,
+        "median_size": 1.0
+      },
+      "product_results.price_insights.stores": {
+        "pages": 25,
+        "median_size": 3
+      },
+      "product_results.price_range": {
+        "pages": 27,
+        "median_size": 7
+      },
+      "product_results.product_attributes": {
+        "pages": 27,
+        "median_size": 6
+      },
+      "product_results.product_attributes[].name": {
+        "pages": 27,
+        "median_size": 5
+      },
+      "product_results.product_attributes[].value": {
+        "pages": 27,
+        "median_size": 8
+      },
+      "product_results.serpapi_google_product_link": {
+        "pages": 26,
+        "median_size": 1480.0
+      },
+      "product_results.serpapi_immersive_product_link": {
+        "pages": 26,
+        "median_size": 1490.0
+      },
+      "product_results.stores": {
+        "pages": 27,
+        "median_size": 3
+      },
+      "product_results.stores[].additional_costs": {
+        "pages": 27,
+        "median_size": 4
+      },
+      "product_results.stores[].coupon": {
+        "pages": 1,
+        "median_size": 12
+      },
+      "product_results.stores[].details_and_offers": {
+        "pages": 27,
+        "median_size": 3
+      },
+      "product_results.stores[].discount": {
+        "pages": 9,
+        "median_size": 7
+      },
+      "product_results.stores[].extracted_original_price": {
+        "pages": 9,
+        "median_size": 1
+      },
+      "product_results.stores[].extracted_price": {
+        "pages": 27,
+        "median_size": 1
+      },
+      "product_results.stores[].extracted_total": {
+        "pages": 27,
+        "median_size": 1
+      },
+      "product_results.stores[].immersive_product_page_token": {
+        "pages": 26,
+        "median_size": 1415.0
+      },
+      "product_results.stores[].link": {
+        "pages": 27,
+        "median_size": 169
+      },
+      "product_results.stores[].logo": {
+        "pages": 27,
+        "median_size": 137
+      },
+      "product_results.stores[].merchant_id": {
+        "pages": 27,
+        "median_size": 7
+      },
+      "product_results.stores[].name": {
+        "pages": 27,
+        "median_size": 8
+      },
+      "product_results.stores[].original_price": {
+        "pages": 9,
+        "median_size": 6
+      },
+      "product_results.stores[].payment_methods": {
+        "pages": 27,
+        "median_size": 29
+      },
+      "product_results.stores[].position": {
+        "pages": 27,
+        "median_size": 1
+      },
+      "product_results.stores[].price": {
+        "pages": 27,
+        "median_size": 6
+      },
+      "product_results.stores[].rating": {
+        "pages": 23,
+        "median_size": 1
+      },
+      "product_results.stores[].reviews": {
+        "pages": 23,
+        "median_size": 1
+      },
+      "product_results.stores[].serpapi_immersive_product_api": {
+        "pages": 26,
+        "median_size": 1490.0
+      },
+      "product_results.stores[].shipping": {
+        "pages": 25,
+        "median_size": 4
+      },
+      "product_results.stores[].shipping_extracted": {
+        "pages": 11,
+        "median_size": 1
+      },
+      "product_results.stores[].tag": {
+        "pages": 16,
+        "median_size": 10.0
+      },
+      "product_results.stores[].title": {
+        "pages": 27,
+        "median_size": 76
+      },
+      "product_results.stores[].total": {
+        "pages": 27,
+        "median_size": 6
+      },
+      "product_results.stores_next_page_token": {
+        "pages": 24,
+        "median_size": 106.0
+      },
+      "product_results.thumbnails": {
+        "pages": 27,
+        "median_size": 12
+      },
+      "product_results.title": {
+        "pages": 27,
+        "median_size": 47
+      }
+    }
+  },
+  "retry_with_token": {
+    "failed_lookups": 13,
+    "have_page_token": 13
+  }
+}

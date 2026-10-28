@@ -18,5 +18,6 @@ case "$MODE" in
   selftest) qwen-python -m unittest -v test_serpapi ;;
   collect)  qwen-python -u collect.py --max-calls "$(tr -d '[:space:]' < max_calls.txt)" ;;
   dryrun)   qwen-python -u collect.py --dry-run ;;
+  audit)    qwen-python -u audit.py ;;
   *) echo "unknown mode $MODE" >&2; exit 2 ;;
 esac

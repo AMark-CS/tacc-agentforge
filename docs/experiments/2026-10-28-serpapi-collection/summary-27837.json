@@ -1,0 +1,11 @@
+{
+  "queries": 8,
+  "products_requested": 40,
+  "stopped": "finished",
+  "empty_queries": [],
+  "calls_made": 48,
+  "errors": 13,
+  "run_dir": "/mnt/home/markzhang/USERDIR/data/serpapi/run-27837",
+  "job": "27837",
+  "max_calls": 50
+}

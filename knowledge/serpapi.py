@@ -181,9 +181,15 @@ class SerpApiClient:
     def search_shopping(self, query: str, **extra) -> tuple[CallRecord, dict | None]:
         return self._request("google_shopping", {"q": query, **extra})
 
-    def get_product(self, product_id: str, **extra) -> tuple[CallRecord, dict | None]:
+    def get_product(self, product_id: str | None = None, page_token: str | None = None,
+                    **extra) -> tuple[CallRecord, dict | None]:
+        """Detail lookup. Prefer the page token a shopping result returns: in the first run, 13 of
+        40 lookups by bare product_id came back empty even though every result had a token."""
+        if not (page_token or product_id):
+            raise ValueError("need a page_token or a product_id")
         flags = {"offers": 1, "specs": 1, "reviews": 1}
-        return self._request("google_product", {"product_id": product_id, **flags, **extra})
+        ident = {"page_token": page_token} if page_token else {"product_id": product_id}
+        return self._request("google_product", {**ident, **flags, **extra})
 
 
 def top_products(data: dict | None, n: int) -> list[dict]:
@@ -192,7 +198,8 @@ def top_products(data: dict | None, n: int) -> list[dict]:
     for item in (data or {}).get("shopping_results", []) or []:
         if item.get("product_id"):
             found.append({"product_id": str(item["product_id"]), "title": item.get("title"),
-                          "price": item.get("price"), "source": item.get("source")})
+                          "price": item.get("price"), "source": item.get("source"),
+                          "page_token": item.get("immersive_product_page_token")})
         if len(found) >= n:
             break
     return found
@@ -216,7 +223,7 @@ def collect(client: SerpApiClient, queries: list[dict], products_per_query: int 
                 if product["product_id"] in seen:
                     continue
                 seen.add(product["product_id"])
-                client.get_product(product["product_id"])
+                client.get_product(product["product_id"], page_token=product.get("page_token"))
                 summary["products_requested"] += 1
         summary["stopped"] = "finished"
     except BudgetExceeded as exc:
