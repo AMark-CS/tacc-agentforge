@@ -1,0 +1,276 @@
+{
+  "job": "27833",
+  "model": "/mnt/home/public/course-envs/CSIT6000V/project/qwen3.8-27b-v1/models/Qwen3.8-27B-AWQ-INT4",
+  "stages": {
+    "imports": {
+      "ok": true,
+      "seconds": 45.6,
+      "result": {
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "SLURM_JOB_GPUS": "2,3",
+          "SLURM_GPUS": null,
+          "GPU_DEVICE_ORDINAL": "2,3",
+          "NVIDIA_VISIBLE_DEVICES": null
+        },
+        "cuda_available": true,
+        "device_count": 2,
+        "torch": "2.11.0+cu128",
+        "transformers": "5.10.4",
+        "gpus": [
+          "NVIDIA GeForce RTX 3090",
+          "NVIDIA GeForce RTX 3090"
+        ],
+        "gpu_total_gib": [
+          23.7,
+          23.7
+        ],
+        "peft": "0.21.2",
+        "accelerate": "1.15.0",
+        "fla": "0.6.0",
+        "compressed_tensors": "0.17.0",
+        "causal_conv1d": "MISSING: ModuleNotFoundError(\"No module named 'causal_conv1d'\")"
+      }
+    },
+    "config": {
+      "ok": true,
+      "seconds": 0.0,
+      "result": {
+        "architectures": [
+          "Qwen3_5ForConditionalGeneration"
+        ],
+        "model_type": "qwen3_5",
+        "layers": 64,
+        "layer_types": [
+          "full_attention",
+          "linear_attention"
+        ],
+        "quantization": {
+          "quant_method": "compressed-tensors",
+          "format": "pack-quantized"
+        }
+      }
+    },
+    "load_model": {
+      "ok": true,
+      "seconds": 23.2,
+      "result": {
+        "loader": "AutoModelForImageTextToText",
+        "class": "Qwen3_5ForConditionalGeneration",
+        "gpu_alloc_gib": [
+          7.18,
+          11.61
+        ],
+        "param_dtypes": [
+          "torch.bfloat16",
+          "torch.int32",
+          "torch.int64"
+        ]
+      }
+    },
+    "remove_decompress_hooks": {
+      "ok": true,
+      "seconds": 0.0,
+      "result": {
+        "removed_hooks": 1
+      }
+    },
+    "inspect_modules": {
+      "ok": true,
+      "seconds": 0.0,
+      "result": {
+        "module_types": {
+          "Linear": 607,
+          "Qwen3_5RMSNorm": 161,
+          "LayerNorm": 55,
+          "Conv1d": 48,
+          "FusedRMSNormGated": 48,
+          "Embedding": 2,
+          "Conv3d": 1
+        },
+        "leaf_names": {
+          "gate_proj": 64,
+          "up_proj": 64,
+          "down_proj": 64,
+          "input_layernorm": 64,
+          "post_attention_layernorm": 64,
+          "norm": 50,
+          "conv1d": 48,
+          "out_proj": 48,
+          "in_proj_qkv": 48,
+          "in_proj_z": 48,
+          "in_proj_b": 48,
+          "in_proj_a": 48,
+          "proj": 28,
+          "linear_fc1": 28,
+          "linear_fc2": 28,
+          "norm1": 27,
+          "norm2": 27,
+          "qkv": 27,
+          "q_proj": 16,
+          "k_proj": 16,
+          "v_proj": 16,
+          "o_proj": 16,
+          "q_norm": 16,
+          "k_norm": 16,
+          "pos_embed": 1
+        }
+      }
+    },
+    "dequant_check": {
+      "ok": true,
+      "seconds": 0.0,
+      "result": {
+        "module": "model.language_model.layers.0.mlp.gate_proj",
+        "tensors": {
+          "weight_scale": [
+            [
+              17408,
+              160
+            ],
+            "torch.bfloat16"
+          ],
+          "weight_zero_point": [
+            [
+              2176,
+              160
+            ],
+            "torch.int32"
+          ],
+          "weight_packed": [
+            [
+              17408,
+              640
+            ],
+            "torch.int32"
+          ],
+          "weight_shape": [
+            [
+              2
+            ],
+            "torch.int64"
+          ]
+        },
+        "unpacked_shape": [
+          17408,
+          5120
+        ],
+        "mean": 2.843841912181233e-06,
+        "std": 0.00932752899825573,
+        "max_abs": 0.55859375,
+        "has_nan": false,
+        "quantized_modules": 399
+      }
+    },
+    "forward_only": {
+      "ok": true,
+      "seconds": 136.5,
+      "result": {
+        "text": "The capital of France is Paris.\nThe capital of Germany is",
+        "seconds": 135.71,
+        "gpu_alloc_gib": [
+          7.18,
+          11.62
+        ]
+      }
+    },
+    "lora": {
+      "ok": true,
+      "seconds": 0.1,
+      "result": {
+        "wrapped_modules": 400,
+        "examples": [
+          "model.language_model.layers.0.linear_attn.out_proj",
+          "model.language_model.layers.0.linear_attn.in_proj_qkv",
+          "model.language_model.layers.0.linear_attn.in_proj_z"
+        ],
+        "trainable_params": 54394880,
+        "gpu_alloc_gib": [
+          7.24,
+          11.76
+        ]
+      }
+    },
+    "train_steps": {
+      "ok": true,
+      "seconds": 160.1,
+      "result": [
+        {
+          "seq_len": 256,
+          "step": 0,
+          "loss": 5.5876,
+          "seconds": 139.9,
+          "peak_gib": [
+            8.75,
+            13.22
+          ]
+        },
+        {
+          "seq_len": 256,
+          "step": 1,
+          "loss": 2.7961,
+          "seconds": 3.11,
+          "peak_gib": [
+            8.87,
+            13.51
+          ]
+        },
+        {
+          "seq_len": 256,
+          "step": 2,
+          "loss": 0.2003,
+          "seconds": 3.29,
+          "peak_gib": [
+            8.87,
+            13.51
+          ]
+        },
+        {
+          "seq_len": 721,
+          "step": 0,
+          "loss": 0.0811,
+          "seconds": 4.58,
+          "peak_gib": [
+            9.35,
+            14.37
+          ]
+        },
+        {
+          "seq_len": 721,
+          "step": 1,
+          "loss": 0.0804,
+          "seconds": 4.58,
+          "peak_gib": [
+            9.35,
+            14.37
+          ]
+        },
+        {
+          "seq_len": 721,
+          "step": 2,
+          "loss": 0.0804,
+          "seconds": 4.59,
+          "peak_gib": [
+            9.35,
+            14.37
+          ]
+        }
+      ]
+    },
+    "save_adapter": {
+      "ok": true,
+      "seconds": 3.6,
+      "result": {
+        "path": "/mnt/home/markzhang/USERDIR/adapters/feasibility-27b-27833",
+        "tensors": 800,
+        "files": {
+          "lora_weights.safetensors": 217680576
+        },
+        "sample_names": [
+          "model.language_model.layers.0.linear_attn.out_proj.lora_A",
+          "model.language_model.layers.0.linear_attn.out_proj.lora_B"
+        ]
+      }
+    }
+  }
+}

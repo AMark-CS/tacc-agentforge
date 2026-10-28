@@ -1,0 +1,49 @@
+{
+  "job": "27823",
+  "proxy_env": {},
+  "ssl_cert_env": {
+    "CONDA_SHLVL": "1",
+    "CONDA_EXE": "/mnt/home/markzhang/.Miniconda3/bin/conda",
+    "CONDA_PREFIX": "/mnt/home/public/course-envs/CSIT6000V/assignment1/mpi-gemm-v1",
+    "CONDA_BUILD_CROSS_COMPILATION": "",
+    "CONDA_TOOLCHAIN_HOST": "x86_64-conda-linux-gnu",
+    "CONDA_TOOLCHAIN_BUILD": "x86_64-conda-linux-gnu",
+    "CONDA_PYTHON_EXE": "/mnt/home/markzhang/.Miniconda3/bin/python",
+    "CONDA_PROMPT_MODIFIER": "(/mnt/home/public/course-envs/CSIT6000V/assignment1/mpi-gemm-v1) ",
+    "CONDA_BUILD_SYSROOT": "/mnt/home/public/course-envs/CSIT6000V/assignment1/mpi-gemm-v1/x86_64-conda-linux-gnu/sysroot",
+    "CONDA_DEFAULT_ENV": "/mnt/home/public/course-envs/CSIT6000V/assignment1/mpi-gemm-v1"
+  },
+  "default_verify_paths": "DefaultVerifyPaths(cafile=None, capath='/etc/ssl/certs', openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='/etc/ssl/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='/etc/ssl/certs')",
+  "system_ca_bundle": "/etc/ssl/certs/ca-certificates.crt",
+  "which": {
+    "curl": null,
+    "wget": null,
+    "git": null,
+    "gcc": "/mnt/home/public/course-envs/CSIT6000V/assignment1/mpi-gemm-v1/bin/gcc",
+    "g++": "/usr/bin/g++",
+    "pip": null,
+    "conda": "/mnt/home/markzhang/.Miniconda3/condabin/conda"
+  },
+  "curl_default": {
+    "https://huggingface.co": "ERROR FileNotFoundError(2, 'No such file or directory')",
+    "https://hf-mirror.com": "ERROR FileNotFoundError(2, 'No such file or directory')",
+    "https://pypi.org/simple/pip/": "ERROR FileNotFoundError(2, 'No such file or directory')",
+    "https://files.pythonhosted.org": "ERROR FileNotFoundError(2, 'No such file or directory')",
+    "https://github.com": "ERROR FileNotFoundError(2, 'No such file or directory')",
+    "https://conda.anaconda.org": "ERROR FileNotFoundError(2, 'No such file or directory')"
+  },
+  "curl_insecure_reachability": {
+    "https://huggingface.co": "ERROR FileNotFoundError(2, 'No such file or directory')",
+    "https://hf-mirror.com": "ERROR FileNotFoundError(2, 'No such file or directory')"
+  },
+  "python_default": {
+    "https://huggingface.co": "no: URLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)'))",
+    "https://hf-mirror.com": "no: URLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)'))",
+    "https://pypi.org/simple/pip/": "no: URLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)'))"
+  },
+  "python_system_ca": {
+    "https://huggingface.co": "http=200",
+    "https://hf-mirror.com": "http=200",
+    "https://pypi.org/simple/pip/": "http=200"
+  }
+}

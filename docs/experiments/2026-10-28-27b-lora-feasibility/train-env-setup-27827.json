@@ -1,0 +1,41 @@
+{
+  "job": "27827",
+  "pylib": "/mnt/home/markzhang/USERDIR/pylib",
+  "installs": {
+    "peft": {
+      "returncode": 0,
+      "tail": "Collecting peft\n  Downloading peft-0.21.2-py3-none-any.whl (835 kB)\nInstalling collected packages: peft\nSuccessfully installed peft-0.21.2\n"
+    },
+    "accelerate": {
+      "returncode": 0,
+      "tail": "Collecting accelerate\n  Downloading accelerate-1.15.0-py3-none-any.whl (394 kB)\nInstalling collected packages: accelerate\nSuccessfully installed accelerate-1.15.0\n"
+    },
+    "flash-linear-attention": {
+      "returncode": 0,
+      "tail": "Collecting flash-linear-attention\n  Downloading flash_linear_attention-0.6.0-py3-none-any.whl (403 kB)\nInstalling collected packages: flash-linear-attention\nSuccessfully installed flash-linear-attention-0.6.0\n"
+    },
+    "fla-core": {
+      "returncode": 0,
+      "tail": "Collecting fla-core\n  Downloading fla_core-0.6.0-py3-none-any.whl (1.1 MB)\nInstalling collected packages: fla-core\nSuccessfully installed fla-core-0.6.0\n"
+    }
+  },
+  "pip_python": "/mnt/home/markzhang/.Miniconda3/bin/python",
+  "imports": {
+    "peft": "0.21.2",
+    "accelerate": "1.15.0",
+    "fla": "0.6.0",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.10.4",
+    "compressed_tensors": "0.17.0"
+  },
+  "installed_dirs": [
+    "accelerate",
+    "accelerate-1.15.0.dist-info",
+    "bin",
+    "fla",
+    "fla_core-0.6.0.dist-info",
+    "flash_linear_attention-0.6.0.dist-info",
+    "peft",
+    "peft-0.21.2.dist-info"
+  ]
+}
