@@ -229,8 +229,8 @@ None.
   the model needs. Weight and KV-cache sizes from vLLM's startup log are shown for every run.
 - PagedAttention is always on in vLLM and cannot be disabled, so it is not an on/off variant here.
   Block size cannot be varied on this model because vLLM forces 784-token blocks for the hybrid
-  (Mamba + attention) layers. Quantization precision comparisons need a second checkpoint, which is not
-  available on the cluster.
+  (Mamba + attention) layers. Quantization precision comparisons need a second checkpoint, which was not
+  downloaded.
 
 ## Findings
 
@@ -298,9 +298,12 @@ with the baseline from its own job. Group A's baseline is eager mode.
 
 - **Prefix caching plus the other flags, and kv-fp8.** Prefix caching was tested only on top of CUDA graphs and
   eager mode separately; combinations with Triton or chunked-prefill changes were not run.
-- **Precision comparisons (INT8/INT4/FP8 weights).** Only the AWQ INT4 checkpoint exists on the cluster
-  and the nodes have no internet access to fetch another model. Weight-quantization differences
-  are therefore not measured.
+- **Precision comparisons (INT8/INT4/FP8 weights).** Only the AWQ INT4 checkpoint is installed on the cluster, and
+  no second checkpoint was downloaded, so weight-quantization differences are not measured. The compute
+  nodes can reach Hugging Face and PyPI over HTTPS if Python is pointed at the system certificates
+  (`SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt`; HEAD requests returned HTTP 200 in job 27823). An
+  earlier note here said the nodes had no internet access; that was wrong, the failure was Python not
+  trusting the certificates.
 - **PagedAttention.** It is always on in vLLM and cannot be disabled, and the block size is forced to
   784 tokens by the hybrid layers, so there was nothing to vary.
 - **Repeats.** Only the CUDA-graphs baseline ran more than once; every other variant ran a single time.
@@ -309,8 +312,9 @@ with the baseline from its own job. Group A's baseline is eager mode.
 
 ## Next steps
 
-1. Decide with the course staff whether a CUDA 12 toolchain or a smaller second checkpoint can be made
-   available, which would unlock FlashInfer, FP8 KV and the quantization comparison.
+1. Download a smaller second checkpoint (the nodes have network access, see above) and quantize it to
+   FP8/INT8/INT4 for the weight-precision comparison. Installing a CUDA 12 toolchain for FlashInfer and FP8 KV
+   from PyPI or conda is now possible in principle but untested.
 2. Repeat `prefix-caching` at least twice more, and test a longer shared prefix and higher concurrency,
    since that is the variant with a real effect.
 3. Recommended serving configuration from these runs: CUDA graphs on, prefix caching on for workloads with
