@@ -1,0 +1,15 @@
+{
+  "_comment": "Pilot catalog for the shopping advisor. Four categories now; the plan reserves a fifth, unseen category until after the system is frozen, so do not add it here. US locale keeps prices in USD.",
+  "locale": {"gl": "us", "hl": "en"},
+  "products_per_query": 5,
+  "queries": [
+    {"category": "earbuds", "q": "wireless earbuds"},
+    {"category": "earbuds", "q": "noise cancelling earbuds under 100"},
+    {"category": "chargers", "q": "usb-c wall charger 65w"},
+    {"category": "chargers", "q": "portable power bank 20000mah"},
+    {"category": "keyboards", "q": "mechanical keyboard"},
+    {"category": "keyboards", "q": "wireless keyboard and mouse combo"},
+    {"category": "backpacks", "q": "laptop backpack 15.6 inch"},
+    {"category": "backpacks", "q": "waterproof travel backpack"}
+  ]
+}

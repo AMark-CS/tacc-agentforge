@@ -18,3 +18,8 @@ deploy/tacc/vllm-experiments/experiments.json
 deploy/tacc/vllm-experiments/tuxiv.conf
 deploy/tacc/vllm-experiments/group.txt
 deploy/tacc/vllm-experiments/only.txt
+deploy/tacc/serpapi-collect/serpapi.py
+deploy/tacc/serpapi-collect/test_serpapi.py
+deploy/tacc/serpapi-collect/shopping_queries.json
+deploy/tacc/serpapi-collect/mode.txt
+deploy/tacc/serpapi-collect/max_calls.txt
